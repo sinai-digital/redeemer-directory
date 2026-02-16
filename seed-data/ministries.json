@@ -1,0 +1,86 @@
+[
+  {
+    "id": "ministry-01",
+    "name": "Children's Ministry",
+    "description": "Nurturing the faith of our youngest members through age-appropriate Bible lessons, activities, and fellowship.",
+    "category": "education",
+    "contact_id": "member-02"
+  },
+  {
+    "id": "ministry-02",
+    "name": "Youth Ministry",
+    "description": "Equipping teens to grow in their faith through Bible study, mentorship, and community service.",
+    "category": "education",
+    "contact_id": "member-43"
+  },
+  {
+    "id": "ministry-03",
+    "name": "Worship Team",
+    "description": "Leading our congregation in worship through music, song, and creative arts each Sunday.",
+    "category": "worship",
+    "contact_id": "member-55"
+  },
+  {
+    "id": "ministry-04",
+    "name": "Food Pantry",
+    "description": "Serving our neighbors in need by collecting and distributing food to families in the Riverview community.",
+    "category": "outreach",
+    "contact_id": "member-11"
+  },
+  {
+    "id": "ministry-05",
+    "name": "Men's Ministry",
+    "description": "Building brotherhood through Bible study, service projects, and fellowship events for men of all ages.",
+    "category": "care",
+    "contact_id": "member-36"
+  },
+  {
+    "id": "ministry-06",
+    "name": "Women's Ministry",
+    "description": "Encouraging and equipping women through Bible study, mentoring, and fellowship gatherings.",
+    "category": "care",
+    "contact_id": "member-08"
+  },
+  {
+    "id": "ministry-07",
+    "name": "Missions Committee",
+    "description": "Coordinating local and global mission efforts to spread the Gospel and serve communities in need.",
+    "category": "outreach",
+    "contact_id": "member-33"
+  },
+  {
+    "id": "ministry-08",
+    "name": "Welcome Team",
+    "description": "Creating a warm and inviting atmosphere for all who walk through our doors on Sunday mornings.",
+    "category": "care",
+    "contact_id": "member-15"
+  },
+  {
+    "id": "ministry-09",
+    "name": "Deacons",
+    "description": "Serving the practical and spiritual needs of our congregation through care, support, and stewardship.",
+    "category": "leadership",
+    "contact_id": "member-10"
+  },
+  {
+    "id": "ministry-10",
+    "name": "Elders",
+    "description": "Providing spiritual oversight, teaching, and pastoral care for the congregation.",
+    "category": "leadership",
+    "contact_id": "member-26"
+  },
+  {
+    "id": "ministry-11",
+    "name": "Nursery",
+    "description": "Providing loving, safe care for infants and toddlers during Sunday worship services.",
+    "category": "care",
+    "contact_id": "member-39"
+  },
+  {
+    "id": "ministry-12",
+    "name": "Sunday School",
+    "description": "Teaching the Bible to all ages through structured classes held before the Sunday worship service.",
+    "category": "education",
+    "contact_id": "member-47"
+  }
+]

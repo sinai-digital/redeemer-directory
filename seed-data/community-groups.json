@@ -1,0 +1,56 @@
+[
+  {
+    "id": "group-01",
+    "name": "Swartz Home Group",
+    "description": "A welcoming mid-week group focused on fellowship, prayer, and studying God's Word together in the Swartz home.",
+    "meeting_day": "Wednesday",
+    "meeting_time": "7:00 PM",
+    "meeting_location": "The Swartz Home, 456 Boyette Rd",
+    "leader_id": "member-04"
+  },
+  {
+    "id": "group-02",
+    "name": "McCarthy Fellowship",
+    "description": "A warm Thursday evening gathering for prayer, Bible discussion, and building community in the McCarthy home.",
+    "meeting_day": "Thursday",
+    "meeting_time": "7:00 PM",
+    "meeting_location": "The McCarthy Home, 789 Providence Rd",
+    "leader_id": "member-07"
+  },
+  {
+    "id": "group-03",
+    "name": "Boyette Road Group",
+    "description": "A neighborhood group meeting in the Boyette Springs community room for Bible study and mutual encouragement.",
+    "meeting_day": "Tuesday",
+    "meeting_time": "6:30 PM",
+    "meeting_location": "Community Room, Boyette Springs",
+    "leader_id": "member-26"
+  },
+  {
+    "id": "group-04",
+    "name": "South Shore Community Group",
+    "description": "A community-focused group meeting at the South Shore Library, open to newcomers and visitors.",
+    "meeting_day": "Wednesday",
+    "meeting_time": "6:30 PM",
+    "meeting_location": "South Shore Library Meeting Room",
+    "leader_id": "member-18"
+  },
+  {
+    "id": "group-05",
+    "name": "Evening Grace Group",
+    "description": "A Monday evening group centered on grace-filled conversations, prayer, and studying the Scriptures together.",
+    "meeting_day": "Monday",
+    "meeting_time": "7:30 PM",
+    "meeting_location": "The Henderson Home, 321 Bloomingdale Ave",
+    "leader_id": "member-10"
+  },
+  {
+    "id": "group-06",
+    "name": "Brandon Bible Study",
+    "description": "A Thursday evening Bible study meeting at the Brandon Community Center, focused on in-depth Scripture exploration.",
+    "meeting_day": "Thursday",
+    "meeting_time": "6:00 PM",
+    "meeting_location": "Brandon Community Center",
+    "leader_id": "member-46"
+  }
+]

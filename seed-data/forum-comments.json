@@ -1,0 +1,387 @@
+[
+  {
+    "id": "comment-01",
+    "post_id": "post-01",
+    "author_id": "member-02",
+    "parent_id": null,
+    "body": "Praying for Robert and the whole Henderson family. Please let us know if there's anything we can do to help with meals or rides!"
+  },
+  {
+    "id": "comment-02",
+    "post_id": "post-01",
+    "author_id": "member-47",
+    "parent_id": null,
+    "body": "We'll be lifting Robert up in prayer at our Bible study this week. Patricia, don't hesitate to call if you need anything at all."
+  },
+  {
+    "id": "comment-03",
+    "post_id": "post-01",
+    "author_id": "member-24",
+    "parent_id": null,
+    "body": "Lord, we ask for Your healing hand over Robert. Grant the surgeons wisdom and give the family peace. Amen."
+  },
+  {
+    "id": "comment-04",
+    "post_id": "post-01",
+    "author_id": "member-55",
+    "parent_id": "comment-01",
+    "body": "Heather and I can do a meal on Friday evening. Sarah, should we coordinate through you or reach out to Patricia directly?"
+  },
+  {
+    "id": "comment-05",
+    "post_id": "post-01",
+    "author_id": "member-02",
+    "parent_id": "comment-04",
+    "body": "That would be wonderful, Jason! I'll set up a meal train and share the link. Friday works perfectly."
+  },
+  {
+    "id": "comment-06",
+    "post_id": "post-02",
+    "author_id": "member-39",
+    "parent_id": null,
+    "body": "This is so exciting! Caleb is finally old enough to attend this year. I'd love to help with the craft station too!"
+  },
+  {
+    "id": "comment-07",
+    "post_id": "post-02",
+    "author_id": "member-13",
+    "parent_id": null,
+    "body": "Lily can't wait! She's been asking about VBS since January. I can help with snack prep on Monday and Tuesday."
+  },
+  {
+    "id": "comment-08",
+    "post_id": "post-02",
+    "author_id": "member-29",
+    "parent_id": null,
+    "body": "Count us in! Isabella will be there. I can volunteer for registration desk if that still needs to be filled."
+  },
+  {
+    "id": "comment-09",
+    "post_id": "post-02",
+    "author_id": "member-02",
+    "parent_id": "comment-06",
+    "body": "Wonderful, Jessica! I'll put you down for crafts. And yes, Caleb is going to love it!"
+  },
+  {
+    "id": "comment-10",
+    "post_id": "post-03",
+    "author_id": "member-08",
+    "parent_id": null,
+    "body": "Grace, thank you for sharing this with us. We will be praying fervently for your mother. God is near to the brokenhearted."
+  },
+  {
+    "id": "comment-11",
+    "post_id": "post-03",
+    "author_id": "member-34",
+    "parent_id": null,
+    "body": "Praying for complete healing and for peace that passes understanding for your whole family. You are so loved."
+  },
+  {
+    "id": "comment-12",
+    "post_id": "post-03",
+    "author_id": "member-01",
+    "parent_id": null,
+    "body": "Lifting your mom up in prayer, Grace. Our God is the Great Physician. Please keep us updated."
+  },
+  {
+    "id": "comment-13",
+    "post_id": "post-03",
+    "author_id": "member-59",
+    "parent_id": null,
+    "body": "Praying right now. If there's anything practical we can do to help, even from a distance, please let us know."
+  },
+  {
+    "id": "comment-14",
+    "post_id": "post-04",
+    "author_id": "member-07",
+    "parent_id": null,
+    "body": "Romans 8:28 has been my anchor verse for years. Even when circumstances don't make sense, knowing that God is working all things together for good gives me such hope."
+  },
+  {
+    "id": "comment-15",
+    "post_id": "post-04",
+    "author_id": "member-46",
+    "parent_id": null,
+    "body": "For me, verses 38-39 are the most powerful. Nothing in all creation can separate us from God's love. That's the foundation everything else rests on."
+  },
+  {
+    "id": "comment-16",
+    "post_id": "post-04",
+    "author_id": "member-31",
+    "parent_id": null,
+    "body": "I've been meditating on verses 14-17 about adoption. As an adoptive parent myself, the imagery of being adopted into God's family hits differently. So beautiful."
+  },
+  {
+    "id": "comment-17",
+    "post_id": "post-04",
+    "author_id": "member-23",
+    "parent_id": "comment-15",
+    "body": "Amen, Richard! That passage is one I come back to again and again. The list Paul gives is so comprehensive - nothing is left out."
+  },
+  {
+    "id": "comment-18",
+    "post_id": "post-05",
+    "author_id": "member-21",
+    "parent_id": null,
+    "body": "Denise and I will be there! We're bringing her famous mac and cheese. See everyone Saturday!"
+  },
+  {
+    "id": "comment-19",
+    "post_id": "post-05",
+    "author_id": "member-49",
+    "parent_id": null,
+    "body": "We're looking forward to it! Is there a kids' area or should we bring something to keep the little ones busy?"
+  },
+  {
+    "id": "comment-20",
+    "post_id": "post-05",
+    "author_id": "member-15",
+    "parent_id": "comment-19",
+    "body": "Great question, Megan! We'll have a kids' corner set up with coloring sheets and games. Bring the kiddos!"
+  },
+  {
+    "id": "comment-21",
+    "post_id": "post-05",
+    "author_id": "member-62",
+    "parent_id": null,
+    "body": "Ana is making her arroz con pollo. It feeds an army! Can't wait to see everyone."
+  },
+  {
+    "id": "comment-22",
+    "post_id": "post-07",
+    "author_id": "member-27",
+    "parent_id": null,
+    "body": "I can volunteer on Feb 22! I'll bring William too. Happy to help with loading boxes."
+  },
+  {
+    "id": "comment-23",
+    "post_id": "post-07",
+    "author_id": "member-42",
+    "parent_id": null,
+    "body": "Steven and I will be there on March 1st. We also have several bags of canned goods to donate."
+  },
+  {
+    "id": "comment-24",
+    "post_id": "post-07",
+    "author_id": "member-37",
+    "parent_id": null,
+    "body": "I'll sign up for both dates. This ministry is so important for our community."
+  },
+  {
+    "id": "comment-25",
+    "post_id": "post-08",
+    "author_id": "member-64",
+    "parent_id": null,
+    "body": "Liam is so excited for this! I can be one of the adult chaperones. Just let me know what's needed."
+  },
+  {
+    "id": "comment-26",
+    "post_id": "post-08",
+    "author_id": "member-18",
+    "parent_id": null,
+    "body": "Noah has been counting down the days! Angela and I can both help chaperone if you still need people."
+  },
+  {
+    "id": "comment-27",
+    "post_id": "post-08",
+    "author_id": "member-43",
+    "parent_id": "comment-25",
+    "body": "Awesome, Sean! That gives us three chaperones. Just one more needed. Thanks so much!"
+  },
+  {
+    "id": "comment-28",
+    "post_id": "post-09",
+    "author_id": "member-10",
+    "parent_id": null,
+    "body": "Safe travels, Lisa and Richard! Praying for clear roads and a wonderful visit with your son."
+  },
+  {
+    "id": "comment-29",
+    "post_id": "post-09",
+    "author_id": "member-05",
+    "parent_id": null,
+    "body": "Praying for safe travels! Enjoy the time with family."
+  },
+  {
+    "id": "comment-30",
+    "post_id": "post-10",
+    "author_id": "member-01",
+    "parent_id": null,
+    "body": "What incredible news, Raj! God is so faithful. Congratulations to Priya! This is truly an answer to prayer."
+  },
+  {
+    "id": "comment-31",
+    "post_id": "post-10",
+    "author_id": "member-08",
+    "parent_id": null,
+    "body": "Praise the Lord! We've been praying for this and I'm so happy for your family. God's timing is always perfect."
+  },
+  {
+    "id": "comment-32",
+    "post_id": "post-10",
+    "author_id": "member-19",
+    "parent_id": null,
+    "body": "So happy for you all! God is good, all the time."
+  },
+  {
+    "id": "comment-33",
+    "post_id": "post-10",
+    "author_id": "member-47",
+    "parent_id": null,
+    "body": "What a wonderful testimony of God's faithfulness! Celebrating with you!"
+  },
+  {
+    "id": "comment-34",
+    "post_id": "post-11",
+    "author_id": "member-26",
+    "parent_id": null,
+    "body": "I read this years ago and it profoundly shaped my understanding of God. I'd love to go through it again with a group!"
+  },
+  {
+    "id": "comment-35",
+    "post_id": "post-11",
+    "author_id": "member-46",
+    "parent_id": null,
+    "body": "Count me in! I've had it on my shelf but never gotten around to reading it. This would be great motivation."
+  },
+  {
+    "id": "comment-36",
+    "post_id": "post-11",
+    "author_id": "member-58",
+    "parent_id": null,
+    "body": "Brian, this is a great idea. I'd suggest we do 2-3 chapters per week so it's manageable. Christine and I are both interested."
+  },
+  {
+    "id": "comment-37",
+    "post_id": "post-12",
+    "author_id": "member-13",
+    "parent_id": null,
+    "body": "Love this! I've been looking for a way to connect with other moms. I'll be there on the 20th with Lily!"
+  },
+  {
+    "id": "comment-38",
+    "post_id": "post-12",
+    "author_id": "member-02",
+    "parent_id": null,
+    "body": "What a great idea, Amanda! I'll bring Ethan and join you. So looking forward to it!"
+  },
+  {
+    "id": "comment-39",
+    "post_id": "post-12",
+    "author_id": "member-49",
+    "parent_id": null,
+    "body": "Yes! Lucas and I will be there. Thanks for organizing this!"
+  },
+  {
+    "id": "comment-40",
+    "post_id": "post-13",
+    "author_id": "member-01",
+    "parent_id": null,
+    "body": "I'm in! I have a pressure washer I can bring. What time should we meet?"
+  },
+  {
+    "id": "comment-41",
+    "post_id": "post-13",
+    "author_id": "member-18",
+    "parent_id": null,
+    "body": "Count me in. I'll bring my hedge trimmer and mower."
+  },
+  {
+    "id": "comment-42",
+    "post_id": "post-13",
+    "author_id": "member-33",
+    "parent_id": null,
+    "body": "Happy to help! I have some fencing supplies too if they're needed."
+  },
+  {
+    "id": "comment-43",
+    "post_id": "post-13",
+    "author_id": "member-36",
+    "parent_id": "comment-40",
+    "body": "8 AM sharp, Matt! And yes, the pressure washer would be perfect. Thanks brother!"
+  },
+  {
+    "id": "comment-44",
+    "post_id": "post-14",
+    "author_id": "member-24",
+    "parent_id": null,
+    "body": "I'd love to hear 'In Christ Alone' more often. Such a powerful hymn."
+  },
+  {
+    "id": "comment-45",
+    "post_id": "post-14",
+    "author_id": "member-32",
+    "parent_id": null,
+    "body": "How about 'It Is Well With My Soul'? It's been a while since we've sung that one and it's one of my favorites."
+  },
+  {
+    "id": "comment-46",
+    "post_id": "post-14",
+    "author_id": "member-21",
+    "parent_id": null,
+    "body": "I really enjoy when we do 'Build My Life' by Housefires. Also, 'Great Is Thy Faithfulness' always moves me."
+  },
+  {
+    "id": "comment-47",
+    "post_id": "post-14",
+    "author_id": "member-55",
+    "parent_id": "comment-44",
+    "body": "Great suggestion, Grace! We actually have that on the list for next month. Stay tuned!"
+  },
+  {
+    "id": "comment-48",
+    "post_id": "post-15",
+    "author_id": "member-07",
+    "parent_id": null,
+    "body": "Praying for Dave right now, Sean. What a privilege to be a light in his life during this dark season."
+  },
+  {
+    "id": "comment-49",
+    "post_id": "post-15",
+    "author_id": "member-10",
+    "parent_id": null,
+    "body": "Lord, soften Dave's heart and draw him near. Give Sean the right words at the right time. Amen."
+  },
+  {
+    "id": "comment-50",
+    "post_id": "post-17",
+    "author_id": "member-08",
+    "parent_id": null,
+    "body": "Praise God!! This is the best news! We've been praying for Mai and your whole family. What a faithful God we serve!"
+  },
+  {
+    "id": "comment-51",
+    "post_id": "post-17",
+    "author_id": "member-01",
+    "parent_id": null,
+    "body": "David, this is absolutely wonderful. God is so good. Thank you for sharing this praise report!"
+  },
+  {
+    "id": "comment-52",
+    "post_id": "post-18",
+    "author_id": "member-15",
+    "parent_id": null,
+    "body": "Maria and I will be there! We'll bring chips and dip. I call dibs on being the banker in Monopoly."
+  },
+  {
+    "id": "comment-53",
+    "post_id": "post-18",
+    "author_id": "member-55",
+    "parent_id": null,
+    "body": "Sounds like a blast! Heather and I are in. We'll bring Ticket to Ride."
+  },
+  {
+    "id": "comment-54",
+    "post_id": "post-19",
+    "author_id": "member-07",
+    "parent_id": null,
+    "body": "This is going to be a great resource for our church. Thanks for putting in the work on this, Matt!"
+  },
+  {
+    "id": "comment-55",
+    "post_id": "post-20",
+    "author_id": "member-31",
+    "parent_id": null,
+    "body": "I'd add 'Through the Word' to that list. It's a great app/podcast that walks through the Bible chapter by chapter. Very accessible."
+  }
+]

@@ -1,0 +1,51 @@
+[
+  { "id": "reaction-01", "profile_id": "member-01", "post_id": "post-01", "comment_id": null, "reaction_type": "praying" },
+  { "id": "reaction-02", "profile_id": "member-24", "post_id": "post-01", "comment_id": null, "reaction_type": "praying" },
+  { "id": "reaction-03", "profile_id": "member-47", "post_id": "post-01", "comment_id": null, "reaction_type": "praying" },
+  { "id": "reaction-04", "profile_id": "member-55", "post_id": "post-01", "comment_id": null, "reaction_type": "heart" },
+  { "id": "reaction-05", "profile_id": "member-34", "post_id": "post-01", "comment_id": null, "reaction_type": "praying" },
+
+  { "id": "reaction-06", "profile_id": "member-39", "post_id": "post-02", "comment_id": null, "reaction_type": "heart" },
+  { "id": "reaction-07", "profile_id": "member-13", "post_id": "post-02", "comment_id": null, "reaction_type": "heart" },
+  { "id": "reaction-08", "profile_id": "member-29", "post_id": "post-02", "comment_id": null, "reaction_type": "thanks" },
+
+  { "id": "reaction-09", "profile_id": "member-01", "post_id": "post-03", "comment_id": null, "reaction_type": "praying" },
+  { "id": "reaction-10", "profile_id": "member-08", "post_id": "post-03", "comment_id": null, "reaction_type": "praying" },
+  { "id": "reaction-11", "profile_id": "member-59", "post_id": "post-03", "comment_id": null, "reaction_type": "praying" },
+  { "id": "reaction-12", "profile_id": "member-34", "post_id": "post-03", "comment_id": null, "reaction_type": "heart" },
+
+  { "id": "reaction-13", "profile_id": "member-07", "post_id": "post-04", "comment_id": null, "reaction_type": "amen" },
+  { "id": "reaction-14", "profile_id": "member-23", "post_id": "post-04", "comment_id": null, "reaction_type": "amen" },
+  { "id": "reaction-15", "profile_id": "member-31", "post_id": "post-04", "comment_id": null, "reaction_type": "thanks" },
+
+  { "id": "reaction-16", "profile_id": "member-21", "post_id": "post-05", "comment_id": null, "reaction_type": "heart" },
+  { "id": "reaction-17", "profile_id": "member-49", "post_id": "post-05", "comment_id": null, "reaction_type": "heart" },
+
+  { "id": "reaction-18", "profile_id": "member-01", "post_id": "post-06", "comment_id": null, "reaction_type": "thanks" },
+  { "id": "reaction-19", "profile_id": "member-07", "post_id": "post-06", "comment_id": null, "reaction_type": "thanks" },
+  { "id": "reaction-20", "profile_id": "member-46", "post_id": "post-06", "comment_id": null, "reaction_type": "thanks" },
+
+  { "id": "reaction-21", "profile_id": "member-01", "post_id": "post-10", "comment_id": null, "reaction_type": "amen" },
+  { "id": "reaction-22", "profile_id": "member-08", "post_id": "post-10", "comment_id": null, "reaction_type": "heart" },
+  { "id": "reaction-23", "profile_id": "member-19", "post_id": "post-10", "comment_id": null, "reaction_type": "amen" },
+  { "id": "reaction-24", "profile_id": "member-47", "post_id": "post-10", "comment_id": null, "reaction_type": "heart" },
+  { "id": "reaction-25", "profile_id": "member-24", "post_id": "post-10", "comment_id": null, "reaction_type": "amen" },
+
+  { "id": "reaction-26", "profile_id": "member-01", "post_id": "post-17", "comment_id": null, "reaction_type": "amen" },
+  { "id": "reaction-27", "profile_id": "member-08", "post_id": "post-17", "comment_id": null, "reaction_type": "amen" },
+  { "id": "reaction-28", "profile_id": "member-24", "post_id": "post-17", "comment_id": null, "reaction_type": "heart" },
+  { "id": "reaction-29", "profile_id": "member-47", "post_id": "post-17", "comment_id": null, "reaction_type": "praying" },
+  { "id": "reaction-30", "profile_id": "member-55", "post_id": "post-17", "comment_id": null, "reaction_type": "amen" },
+
+  { "id": "reaction-31", "profile_id": "member-02", "post_id": null, "comment_id": "comment-01", "reaction_type": "heart" },
+  { "id": "reaction-32", "profile_id": "member-10", "post_id": null, "comment_id": "comment-03", "reaction_type": "amen" },
+  { "id": "reaction-33", "profile_id": "member-26", "post_id": null, "comment_id": "comment-16", "reaction_type": "heart" },
+  { "id": "reaction-34", "profile_id": "member-07", "post_id": null, "comment_id": "comment-34", "reaction_type": "thanks" },
+  { "id": "reaction-35", "profile_id": "member-33", "post_id": null, "comment_id": "comment-30", "reaction_type": "amen" },
+
+  { "id": "reaction-36", "profile_id": "member-15", "post_id": "post-15", "comment_id": null, "reaction_type": "praying" },
+  { "id": "reaction-37", "profile_id": "member-07", "post_id": "post-15", "comment_id": null, "reaction_type": "praying" },
+  { "id": "reaction-38", "profile_id": "member-10", "post_id": "post-15", "comment_id": null, "reaction_type": "praying" },
+  { "id": "reaction-39", "profile_id": "member-12", "post_id": "post-17", "comment_id": null, "reaction_type": "heart" },
+  { "id": "reaction-40", "profile_id": "member-33", "post_id": "post-17", "comment_id": null, "reaction_type": "heart" }
+]

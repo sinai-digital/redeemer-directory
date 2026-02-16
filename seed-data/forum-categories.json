@@ -1,0 +1,74 @@
+[
+  {
+    "id": "category-01",
+    "name": "Prayer Requests",
+    "slug": "prayer-requests",
+    "description": "Share prayer needs with our church family",
+    "icon": "Heart",
+    "color": "rose",
+    "sort_order": 1
+  },
+  {
+    "id": "category-02",
+    "name": "Announcements",
+    "slug": "announcements",
+    "description": "Church news and updates",
+    "icon": "Megaphone",
+    "color": "blue",
+    "sort_order": 2
+  },
+  {
+    "id": "category-03",
+    "name": "Bible Study",
+    "slug": "bible-study",
+    "description": "Scripture discussion and study resources",
+    "icon": "BookOpen",
+    "color": "emerald",
+    "sort_order": 3
+  },
+  {
+    "id": "category-04",
+    "name": "Fellowship",
+    "slug": "fellowship",
+    "description": "Social events and gatherings",
+    "icon": "Users",
+    "color": "purple",
+    "sort_order": 4
+  },
+  {
+    "id": "category-05",
+    "name": "Serving Opportunities",
+    "slug": "serving-opportunities",
+    "description": "Ways to serve our community",
+    "icon": "HandHeart",
+    "color": "amber",
+    "sort_order": 5
+  },
+  {
+    "id": "category-06",
+    "name": "Youth & Families",
+    "slug": "youth-and-families",
+    "description": "Resources for parents and youth",
+    "icon": "Baby",
+    "color": "cyan",
+    "sort_order": 6
+  },
+  {
+    "id": "category-07",
+    "name": "Praise Reports",
+    "slug": "praise-reports",
+    "description": "Celebrate answered prayers and blessings",
+    "icon": "PartyPopper",
+    "color": "yellow",
+    "sort_order": 7
+  },
+  {
+    "id": "category-08",
+    "name": "General Discussion",
+    "slug": "general-discussion",
+    "description": "Open discussion for our church community",
+    "icon": "MessageCircle",
+    "color": "slate",
+    "sort_order": 8
+  }
+]
