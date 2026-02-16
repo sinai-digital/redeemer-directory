@@ -63,7 +63,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {error && (
         <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-md border border-red-200">
           {error}
@@ -77,12 +77,12 @@ export function LoginForm() {
             name="email"
             type="email"
             label="Email address"
-            placeholder="your.name@example.com"
+            placeholder="matt.pike@example.com"
             required
             autoComplete="email"
             autoFocus
           />
-          <Button type="submit" loading={loading} className="w-full">
+          <Button type="submit" variant="gold" loading={loading} className="w-full">
             <Mail className="h-4 w-4" />
             Send magic link
           </Button>
@@ -94,7 +94,7 @@ export function LoginForm() {
             name="email"
             type="email"
             label="Email address"
-            placeholder="your.name@example.com"
+            placeholder="matt.pike@example.com"
             required
             autoComplete="email"
             autoFocus
@@ -108,7 +108,7 @@ export function LoginForm() {
             required
             autoComplete="current-password"
           />
-          <Button type="submit" loading={loading} className="w-full">
+          <Button type="submit" variant="gold" loading={loading} className="w-full">
             <Lock className="h-4 w-4" />
             Sign in
           </Button>
@@ -129,16 +129,16 @@ export function LoginForm() {
           setMode(mode === "magic" ? "password" : "magic");
           setError(null);
         }}
-        className="w-full flex items-center justify-center gap-2 text-sm text-neutral-700 hover:text-neutral-900 transition-colors"
+        className="w-full flex items-center justify-center gap-2 text-sm text-neutral-700 hover:text-primary-800 transition-colors"
       >
         {mode === "magic" ? (
           <>
-            <Lock className="h-4 w-4" />
+            <Lock className="h-3.5 w-3.5" />
             Sign in with password instead
           </>
         ) : (
           <>
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-3.5 w-3.5" />
             Sign in with magic link instead
           </>
         )}

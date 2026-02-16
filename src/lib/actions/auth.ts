@@ -59,7 +59,7 @@ export async function loginWithPassword(formData: FormData) {
     return { error: "Invalid email or password" };
   }
 
-  redirect("/directory");
+  redirect("/forum");
 }
 
 export async function signOut() {

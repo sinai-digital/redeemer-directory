@@ -26,15 +26,17 @@
   --font-body: var(--font-source-sans);
 }
 
-body {
-  background-color: var(--color-neutral-50);
-  color: var(--color-neutral-900);
-  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-}
+@layer base {
+  body {
+    background-color: var(--color-neutral-50);
+    color: var(--color-neutral-900);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading), ui-serif, Georgia, serif;
-  color: var(--color-neutral-950);
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), ui-serif, Georgia, serif;
+    color: var(--color-neutral-950);
+  }
 }
 
 @media print {

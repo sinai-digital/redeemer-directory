@@ -4,15 +4,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  BookOpen,
   Users,
   MessageSquare,
   User,
   Shield,
   X,
   ExternalLink,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { signOut } from "@/lib/actions/auth";
 import type { Profile } from "@/lib/types";
 
 interface SidebarProps {
@@ -135,13 +136,19 @@ export function Sidebar({ profile, open, onClose }: SidebarProps) {
             <ExternalLink className="h-5 w-5 shrink-0" />
             Church Website
           </a>
-          <div className="flex items-center gap-3 px-4 pb-4 pt-1">
-            <BookOpen className="h-5 w-5 text-accent-400 shrink-0" />
-            <div className="min-w-0">
-              <p className="text-xs text-primary-200 truncate">
-                {profile?.email}
-              </p>
-            </div>
+          <div className="flex items-center justify-between gap-3 px-4 pb-4 pt-1">
+            <p className="text-xs text-primary-200 truncate min-w-0">
+              {profile?.email}
+            </p>
+            <form action={signOut}>
+              <button
+                type="submit"
+                className="p-1.5 rounded-md text-primary-300 hover:text-white hover:bg-primary-800 transition-colors"
+                title="Sign out"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </form>
           </div>
         </div>
       </aside>

@@ -343,14 +343,14 @@ INSERT INTO ministry_members (ministry_id, member_id, role) VALUES ('60995cb0-71
 -- --------------------------------------------------------------------------
 -- forum_categories
 -- --------------------------------------------------------------------------
-INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('15e0b6c8-c9b8-4c50-a1c7-bcf6e86ef1f9', 'Prayer Requests', 'prayer-requests', 'Share prayer needs with our church family', 'Heart', 'rose', 1);
-INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('e7225b77-c098-4345-afdd-5a8dac48c056', 'Announcements', 'announcements', 'Church news and updates', 'Megaphone', 'blue', 2);
+INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('6883c2c8-8c34-4beb-ad8c-b496b9dfbc72', 'General Discussion', 'general-discussion', 'Open discussion for our church community', 'MessageCircle', 'slate', 1);
+INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('15e0b6c8-c9b8-4c50-a1c7-bcf6e86ef1f9', 'Prayer Requests', 'prayer-requests', 'Share prayer needs with our church family', 'Heart', 'rose', 2);
 INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('305341ab-2c48-4e53-a54b-5c092f610c7e', 'Bible Study', 'bible-study', 'Scripture discussion and study resources', 'BookOpen', 'emerald', 3);
-INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('ad01d0ae-e02f-4c65-a30c-eede8684c08e', 'Fellowship', 'fellowship', 'Social events and gatherings', 'Users', 'purple', 4);
-INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('ef517afa-cdf2-465a-a539-9d66876557e9', 'Serving Opportunities', 'serving-opportunities', 'Ways to serve our community', 'HandHeart', 'amber', 5);
-INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('5d1a6c13-e80b-4eb9-a179-c0126373e05d', 'Youth & Families', 'youth-and-families', 'Resources for parents and youth', 'Baby', 'cyan', 6);
-INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('2f8783f8-6f56-4a08-a020-a20c80f6da1b', 'Praise Reports', 'praise-reports', 'Celebrate answered prayers and blessings', 'PartyPopper', 'yellow', 7);
-INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('6883c2c8-8c34-4beb-ad8c-b496b9dfbc72', 'General Discussion', 'general-discussion', 'Open discussion for our church community', 'MessageCircle', 'slate', 8);
+INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('e7225b77-c098-4345-afdd-5a8dac48c056', 'Announcements', 'announcements', 'Church news and updates', 'Megaphone', 'blue', 4);
+INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('ad01d0ae-e02f-4c65-a30c-eede8684c08e', 'Fellowship', 'fellowship', 'Social events and gatherings', 'Users', 'purple', 5);
+INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('ef517afa-cdf2-465a-a539-9d66876557e9', 'Serving Opportunities', 'serving-opportunities', 'Ways to serve our community', 'HandHeart', 'amber', 6);
+INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('5d1a6c13-e80b-4eb9-a179-c0126373e05d', 'Youth & Families', 'youth-and-families', 'Resources for parents and youth', 'Baby', 'cyan', 7);
+INSERT INTO forum_categories (id, name, slug, description, icon, color, sort_order) VALUES ('2f8783f8-6f56-4a08-a020-a20c80f6da1b', 'Praise Reports', 'praise-reports', 'Celebrate answered prayers and blessings', 'PartyPopper', 'yellow', 8);
 
 -- --------------------------------------------------------------------------
 -- profiles (for forum authors)
