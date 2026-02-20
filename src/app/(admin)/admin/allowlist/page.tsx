@@ -3,6 +3,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { AllowlistTable } from "@/components/admin/allowlist-table";
 import { AddToAllowlistForm } from "@/components/admin/add-allowlist-form";
+import { SyncAllowlistButton } from "@/components/admin/sync-allowlist-button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -29,6 +30,17 @@ export default async function AllowlistPage() {
       />
 
       <div className="space-y-6">
+        <Card>
+          <CardContent className="pt-5">
+            <h3 className="font-semibold font-heading mb-2">Bulk Import</h3>
+            <p className="text-sm text-neutral-700 mb-3">
+              Add all member emails from the directory to the allowlist in one step.
+              Emails already on the list will be skipped.
+            </p>
+            <SyncAllowlistButton />
+          </CardContent>
+        </Card>
+
         <Card>
           <CardContent className="pt-5">
             <h3 className="font-semibold font-heading mb-3">Add Email</h3>

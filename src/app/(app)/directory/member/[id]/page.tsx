@@ -39,11 +39,11 @@ export default async function MemberDetailPage({
   return (
     <div>
       <Link
-        href={`/directory/family/${member.family_id}`}
+        href={family ? `/directory/family/${family.id}` : `/directory?tab=members`}
         className="inline-flex items-center gap-1 text-sm text-neutral-700 hover:text-neutral-900 mb-4 transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to {family?.display_name || "family"}
+        {family ? `Back to ${family.display_name}` : "Back to directory"}
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -60,8 +60,8 @@ export default async function MemberDetailPage({
               {member.first_name} {member.last_name}
             </h1>
             <div className="flex items-center justify-center gap-2 mt-2">
-              <Badge variant="primary">{member.family_role}</Badge>
-              <Badge variant="muted">{member.member_status}</Badge>
+              {member.family_role && <Badge variant="primary">{member.family_role}</Badge>}
+              {member.member_status && <Badge variant="muted">{member.member_status}</Badge>}
             </div>
 
             {family && (

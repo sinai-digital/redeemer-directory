@@ -43,8 +43,8 @@ export function FamilyCard({ family, variant = "grid" }: FamilyCardProps) {
   }
 
   return (
-    <Link href={`/directory/family/${family.id}`}>
-      <Card hover className="print-break-inside-avoid">
+    <Link href={`/directory/family/${family.id}`} className="h-full">
+      <Card hover className="print-break-inside-avoid h-full">
         <div className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
             <div className="h-12 w-12 rounded-full bg-primary-100 text-primary-800 flex items-center justify-center shrink-0">

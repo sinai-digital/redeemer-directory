@@ -7,6 +7,7 @@ import type { UserRole } from "@/lib/types";
 interface RoleManagerProps {
   profileId: string;
   currentRole: UserRole;
+  isSelf?: boolean;
 }
 
 const roles: { value: UserRole; label: string }[] = [
@@ -17,14 +18,22 @@ const roles: { value: UserRole; label: string }[] = [
   { value: "super_admin", label: "Super Admin" },
 ];
 
-export function RoleManager({ profileId, currentRole }: RoleManagerProps) {
+export function RoleManager({ profileId, currentRole, isSelf }: RoleManagerProps) {
   const [role, setRole] = useState<UserRole>(currentRole);
   const [loading, setLoading] = useState(false);
 
+  const disabled = loading || (isSelf && currentRole === "super_admin");
+
   async function handleChange(newRole: UserRole) {
+    const previousRole = role;
     setLoading(true);
     setRole(newRole);
-    await updateMemberRole(profileId, newRole);
+
+    const result = await updateMemberRole(profileId, newRole);
+    if (result?.error) {
+      setRole(previousRole);
+    }
+
     setLoading(false);
   }
 
@@ -32,8 +41,9 @@ export function RoleManager({ profileId, currentRole }: RoleManagerProps) {
     <select
       value={role}
       onChange={(e) => handleChange(e.target.value as UserRole)}
-      disabled={loading}
-      className="text-xs rounded-md border border-neutral-200 bg-white px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary-300 disabled:opacity-50"
+      disabled={disabled}
+      title={disabled && isSelf ? "Super admins cannot demote themselves" : undefined}
+      className="text-xs rounded-md border border-neutral-200 bg-white px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary-300 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {roles.map((r) => (
         <option key={r.value} value={r.value}>

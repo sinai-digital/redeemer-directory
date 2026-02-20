@@ -36,7 +36,7 @@ export default async function FamilyDetailPage({
 
   return (
     <div>
-      <Link href="/directory" className="inline-flex items-center gap-1 text-sm text-neutral-700 hover:text-neutral-900 mb-4 transition-colors">
+      <Link href="/directory?tab=families" className="inline-flex items-center gap-1 text-sm text-neutral-700 hover:text-neutral-900 mb-4 transition-colors">
         <ArrowLeft className="h-4 w-4" />
         Back to directory
       </Link>
@@ -107,7 +107,7 @@ export default async function FamilyDetailPage({
                         <p className="font-semibold text-neutral-950">
                           {member.first_name} {member.last_name}
                         </p>
-                        <Badge variant="muted">{member.family_role}</Badge>
+                        {member.family_role && <Badge variant="muted">{member.family_role}</Badge>}
                       </div>
                       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-neutral-700">
                         {member.show_phone && member.phone && (

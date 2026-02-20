@@ -39,15 +39,29 @@
   }
 }
 
+/* Hidden on screen, visible in print */
+.print-only {
+  display: none;
+}
+
 @media print {
+  @page {
+    margin: 0.4in;
+    size: letter;
+  }
+
   .no-print {
     display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
   }
 
   body {
     background: white;
     color: black;
-    font-size: 11pt;
+    font-size: 9pt;
   }
 
   .print-break-inside-avoid {

@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { fetchAll } from "@/lib/supabase/fetch-all";
 import { revalidatePath } from "next/cache";
 import type { UserRole } from "@/lib/types";
 
@@ -29,11 +30,18 @@ async function requireAdmin() {
 export async function getAdminStats() {
   const adminClient = createAdminClient();
 
-  const [families, members, posts, allowlist] = await Promise.all([
+  const [families, members, posts, allowlist, lastSync] = await Promise.all([
     adminClient.from("families").select("id", { count: "exact", head: true }),
     adminClient.from("members").select("id", { count: "exact", head: true }),
     adminClient.from("forum_posts").select("id", { count: "exact", head: true }),
     adminClient.from("auth_allowlist").select("email, claimed_at", { count: "exact" }),
+    adminClient
+      .from("sync_history")
+      .select("performed_at")
+      .is("rolled_back_at", null)
+      .order("performed_at", { ascending: false })
+      .limit(1)
+      .single(),
   ]);
 
   const claimedCount =
@@ -45,6 +53,7 @@ export async function getAdminStats() {
     postCount: posts.count || 0,
     allowlistCount: allowlist.count || 0,
     claimedCount,
+    lastSyncAt: lastSync.data?.performed_at ?? null,
   };
 }
 
@@ -98,8 +107,21 @@ export async function removeFromAllowlist(email: string) {
 }
 
 export async function updateMemberRole(profileId: string, role: UserRole) {
-  await requireAdmin();
+  const user = await requireAdmin();
   const adminClient = createAdminClient();
+
+  // Prevent super_admin from demoting themselves
+  if (profileId === user.id && role !== "super_admin") {
+    const { data: profile } = await adminClient
+      .from("profiles")
+      .select("role")
+      .eq("id", profileId)
+      .single();
+
+    if (profile?.role === "super_admin") {
+      return { error: "Super admins cannot demote themselves" };
+    }
+  }
 
   const { error } = await adminClient
     .from("profiles")
@@ -174,4 +196,50 @@ export async function removePost(postId: string) {
   revalidatePath("/admin/forum");
   revalidatePath("/forum");
   return { success: true };
+}
+
+export async function syncAllowlistFromDirectory() {
+  const user = await requireAdmin();
+  const adminClient = createAdminClient();
+
+  // Fetch all members with non-null emails
+  const members = await fetchAll(adminClient, "members", {
+    select: "email",
+    modify: (q) => q.not("email", "is", null),
+  });
+
+  // Deduplicate and lowercase
+  const memberEmails = [...new Set(
+    members.map((m: { email: string }) => m.email.toLowerCase())
+  )];
+
+  // Get current allowlist emails
+  const { data: existing } = await adminClient
+    .from("auth_allowlist")
+    .select("email");
+
+  const existingSet = new Set(
+    (existing || []).map((a: { email: string }) => a.email.toLowerCase())
+  );
+
+  // Filter to only new emails
+  const newEmails = memberEmails.filter((e) => !existingSet.has(e));
+
+  if (newEmails.length === 0) {
+    return { added: 0, skipped: memberEmails.length };
+  }
+
+  // Batch insert in chunks of 100
+  for (let i = 0; i < newEmails.length; i += 100) {
+    const chunk = newEmails.slice(i, i + 100).map((email) => ({
+      email,
+      invited_by: user.id,
+    }));
+
+    const { error } = await adminClient.from("auth_allowlist").insert(chunk);
+    if (error) return { error: error.message };
+  }
+
+  revalidatePath("/admin/allowlist");
+  return { added: newEmails.length, skipped: memberEmails.length - newEmails.length };
 }

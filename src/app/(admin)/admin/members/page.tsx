@@ -1,28 +1,31 @@
 import { createClient } from "@/lib/supabase/server";
+import { fetchAll } from "@/lib/supabase/fetch-all";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { RoleManager } from "@/components/admin/role-manager";
+import { AdminPeopleTable } from "@/components/admin/admin-people-table";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Manage Members | Admin | Redeemer Church",
+  title: "Manage Directory | Admin | Redeemer Church",
 };
 
 export default async function AdminMembersPage() {
   const supabase = await createClient();
+
+  const { data: { user } } = await supabase.auth.getUser();
 
   const { data: profiles } = await supabase
     .from("profiles")
     .select("*")
     .order("created_at");
 
-  const { data: members } = await supabase
-    .from("members")
-    .select("*, families(family_name)")
-    .order("sort_name");
+  const members = await fetchAll(supabase, "members", {
+    select: "*, families(family_name)",
+    modify: (q) => q.order("sort_name"),
+  });
 
   return (
     <div>
@@ -35,8 +38,8 @@ export default async function AdminMembersPage() {
       </Link>
 
       <PageHeader
-        title="Manage Members"
-        description="View and manage member profiles and roles"
+        title="Manage Directory"
+        description="View and manage people, profiles, and roles"
       />
 
       <div className="space-y-6">
@@ -67,7 +70,7 @@ export default async function AdminMembersPage() {
                         {profile.email}
                       </p>
                     </div>
-                    <RoleManager profileId={profile.id} currentRole={profile.role} />
+                    <RoleManager profileId={profile.id} currentRole={profile.role} isSelf={profile.id === user?.id} />
                   </div>
                 );
               })}
@@ -75,71 +78,13 @@ export default async function AdminMembersPage() {
           </CardContent>
         </Card>
 
-        {/* Members list */}
+        {/* People list */}
         <Card>
           <CardContent className="pt-5">
             <h3 className="font-semibold font-heading mb-4">
-              Directory Members ({members?.length || 0})
+              Directory People ({members.length})
             </h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-neutral-200">
-                    <th className="text-left py-2 px-3 font-semibold text-neutral-700">
-                      Name
-                    </th>
-                    <th className="text-left py-2 px-3 font-semibold text-neutral-700">
-                      Family
-                    </th>
-                    <th className="text-left py-2 px-3 font-semibold text-neutral-700">
-                      Role
-                    </th>
-                    <th className="text-left py-2 px-3 font-semibold text-neutral-700">
-                      Status
-                    </th>
-                    <th className="text-left py-2 px-3 font-semibold text-neutral-700">
-                      Linked
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {members?.map((member) => (
-                    <tr
-                      key={member.id}
-                      className="border-b border-neutral-100 hover:bg-neutral-50"
-                    >
-                      <td className="py-2 px-3 font-medium">
-                        {member.first_name} {member.last_name}
-                      </td>
-                      <td className="py-2 px-3 text-neutral-700">
-                        {(member.families as any)?.family_name}
-                      </td>
-                      <td className="py-2 px-3">
-                        <Badge variant="muted">{member.family_role}</Badge>
-                      </td>
-                      <td className="py-2 px-3">
-                        <Badge
-                          variant={
-                            member.member_status === "active"
-                              ? "success"
-                              : "warning"
-                          }
-                        >
-                          {member.member_status}
-                        </Badge>
-                      </td>
-                      <td className="py-2 px-3">
-                        {member.profile_id ? (
-                          <Badge variant="success">Yes</Badge>
-                        ) : (
-                          <Badge variant="muted">No</Badge>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <AdminPeopleTable members={members as any} />
           </CardContent>
         </Card>
       </div>

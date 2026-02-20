@@ -1,7 +1,7 @@
 import { getAdminStats } from "@/lib/actions/admin";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, Home, MessageSquare, Mail } from "lucide-react";
+import { Users, Home, MessageSquare, Mail, RefreshCw } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {
@@ -20,7 +20,7 @@ export default async function AdminPage() {
       color: "text-primary-800 bg-primary-100",
     },
     {
-      label: "Members",
+      label: "People",
       value: stats.memberCount,
       icon: Users,
       href: "/admin/members",
@@ -79,7 +79,23 @@ export default async function AdminPage() {
         ))}
       </div>
 
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Link href="/admin/sync">
+          <Card hover>
+            <CardContent className="pt-5 text-center">
+              <RefreshCw className="h-8 w-8 mx-auto text-primary-800 mb-2" />
+              <h3 className="font-semibold font-heading">Sync Directory</h3>
+              <p className="text-sm text-neutral-700 mt-1">
+                Upload Subsplash CSV export
+              </p>
+              {stats.lastSyncAt && (
+                <p className="text-xs text-neutral-500 mt-1">
+                  Last sync: {new Date(stats.lastSyncAt).toLocaleDateString()}
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        </Link>
         <Link href="/admin/allowlist">
           <Card hover>
             <CardContent className="pt-5 text-center">
@@ -95,9 +111,9 @@ export default async function AdminPage() {
           <Card hover>
             <CardContent className="pt-5 text-center">
               <Users className="h-8 w-8 mx-auto text-primary-800 mb-2" />
-              <h3 className="font-semibold font-heading">Manage Members</h3>
+              <h3 className="font-semibold font-heading">Manage Directory</h3>
               <p className="text-sm text-neutral-700 mt-1">
-                Edit roles and member info
+                Edit roles and directory info
               </p>
             </CardContent>
           </Card>

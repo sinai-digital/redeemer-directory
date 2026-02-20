@@ -13,14 +13,7 @@ interface MemberCardProps {
 }
 
 export function MemberCard({ member, variant = "grid" }: MemberCardProps) {
-  const familyRoleLabel =
-    member.family_role === "head"
-      ? ""
-      : member.family_role === "spouse"
-      ? ""
-      : member.family_role === "child"
-      ? "Child"
-      : "";
+  const familyRoleLabel = member.family_role === "child" ? "Child" : "";
 
   if (variant === "list") {
     return (
@@ -41,9 +34,11 @@ export function MemberCard({ member, variant = "grid" }: MemberCardProps) {
                   <Badge variant="muted">{familyRoleLabel}</Badge>
                 )}
               </div>
-              <p className="text-sm text-neutral-700 truncate">
-                {member.family_display_name}
-              </p>
+              {member.family_display_name && (
+                <p className="text-sm text-neutral-700 truncate">
+                  {member.family_display_name}
+                </p>
+              )}
             </div>
             <div className="hidden sm:flex items-center gap-4 text-sm text-neutral-700">
               {member.show_phone && member.phone && (
@@ -66,8 +61,8 @@ export function MemberCard({ member, variant = "grid" }: MemberCardProps) {
   }
 
   return (
-    <Link href={`/directory/member/${member.id}`}>
-      <Card hover className="print-break-inside-avoid">
+    <Link href={`/directory/member/${member.id}`} className="h-full">
+      <Card hover className="print-break-inside-avoid h-full">
         <div className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
             <Avatar
@@ -79,9 +74,11 @@ export function MemberCard({ member, variant = "grid" }: MemberCardProps) {
               <p className="font-semibold text-neutral-950">
                 {member.first_name} {member.last_name}
               </p>
-              <p className="text-sm text-neutral-700">
-                {member.family_display_name}
-              </p>
+              {member.family_display_name && (
+                <p className="text-sm text-neutral-700">
+                  {member.family_display_name}
+                </p>
+              )}
             </div>
           </div>
 

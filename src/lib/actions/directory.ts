@@ -1,28 +1,20 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { fetchAll } from "@/lib/supabase/fetch-all";
 
 export async function getDirectoryMembers() {
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("directory_members_view")
-    .select("*")
-    .eq("member_status", "active")
-    .order("sort_name");
-
-  if (error) throw error;
-  return data;
+  return fetchAll(supabase, "directory_members_view", {
+    modify: (q) => q.order("sort_name"),
+  });
 }
 
 export async function getFamilies() {
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("families")
-    .select("*")
-    .order("sort_name");
-
-  if (error) throw error;
-  return data;
+  return fetchAll(supabase, "families", {
+    modify: (q) => q.order("sort_name"),
+  });
 }
 
 export async function getFamily(id: string) {

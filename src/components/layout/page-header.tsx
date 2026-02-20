@@ -14,10 +14,10 @@ export function PageHeader({ title, description, actions, className }: PageHeade
       <div>
         <h1 className="text-2xl font-bold font-heading">{title}</h1>
         {description && (
-          <p className="text-sm text-neutral-700 mt-1">{description}</p>
+          <p className="text-sm text-neutral-700 mt-1 no-print">{description}</p>
         )}
       </div>
-      {actions && <div className="flex items-center gap-2">{actions}</div>}
+      {actions && <div className="flex items-center gap-2 no-print">{actions}</div>}
     </div>
   );
 }
