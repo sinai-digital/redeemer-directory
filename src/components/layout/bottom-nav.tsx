@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Users, MessageSquare, User, Shield } from "lucide-react";
+import { Users, User, Shield } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import type { Profile } from "@/lib/types";
 
@@ -15,7 +15,7 @@ export function BottomNav({ profile }: BottomNavProps) {
   const isAdmin = profile?.role === "admin" || profile?.role === "super_admin";
 
   const items = [
-    { href: "/forum", label: "Forum", icon: MessageSquare },
+    // { href: "/forum", label: "Forum", icon: MessageSquare },  // Hidden for initial launch
     { href: "/directory", label: "Directory", icon: Users },
     { href: "/profile", label: "Profile", icon: User },
     ...(isAdmin ? [{ href: "/admin", label: "Admin", icon: Shield }] : []),

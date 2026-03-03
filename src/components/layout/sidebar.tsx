@@ -5,7 +5,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Users,
-  MessageSquare,
   User,
   Shield,
   X,
@@ -23,7 +22,7 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { href: "/forum", label: "Forum", icon: MessageSquare },
+  // { href: "/forum", label: "Forum", icon: MessageSquare },  // Hidden for initial launch — re-enable when forum is ready
   { href: "/directory", label: "Directory", icon: Users },
   { href: "/profile", label: "My Profile", icon: User },
 ];
@@ -53,7 +52,7 @@ export function Sidebar({ profile, open, onClose }: SidebarProps) {
         )}
       >
         <div className="flex items-center justify-between h-16 px-4 border-b border-primary-800">
-          <Link href="/forum" className="flex items-center gap-2" onClick={onClose}>
+          <Link href="/directory" className="flex items-center gap-2" onClick={onClose}>
             <Image src="/logo.png" alt="Redeemer Church" width={40} height={36} className="shrink-0" />
             <div>
               <span className="text-base font-semibold font-heading">Redeemer</span>

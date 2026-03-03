@@ -48,14 +48,14 @@ export async function updateSession(request: NextRequest) {
 
   if (user && pathname === "/login") {
     const url = request.nextUrl.clone();
-    url.pathname = "/forum";
+    url.pathname = "/directory";
     return NextResponse.redirect(url);
   }
 
-  // Redirect root to forum
+  // Redirect root to directory
   if (user && pathname === "/") {
     const url = request.nextUrl.clone();
-    url.pathname = "/forum";
+    url.pathname = "/directory";
     return NextResponse.redirect(url);
   }
 
@@ -75,7 +75,7 @@ export async function updateSession(request: NextRequest) {
 
     if (!profile || !["admin", "super_admin"].includes(profile.role)) {
       const url = request.nextUrl.clone();
-      url.pathname = "/forum";
+      url.pathname = "/directory";
       return NextResponse.redirect(url);
     }
   }

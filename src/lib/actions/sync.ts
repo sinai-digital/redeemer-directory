@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { fetchAll } from "@/lib/supabase/fetch-all";
+import { syncAllowlistFromDirectory } from "@/lib/actions/admin";
 import type {
   SubsplashPerson,
   SyncPreview,
@@ -253,8 +254,13 @@ const BATCH_SIZE = 100;
 
 export async function executeSync(
   rows: SubsplashPerson[],
-  filename: string
-): Promise<{ success: boolean; summary: SyncHistoryEntry["summary"] }> {
+  filename: string,
+  options?: { updateAllowlist?: boolean }
+): Promise<{
+  success: boolean;
+  summary: SyncHistoryEntry["summary"];
+  allowlist?: { added: number; skipped: number };
+}> {
   const user = await requireAdmin();
   const admin = createAdminClient();
 
@@ -485,7 +491,16 @@ export async function executeSync(
   revalidatePath("/admin/members");
   revalidatePath("/admin/sync");
 
-  return { success: true, summary };
+  // 10. Optionally sync allowlist
+  let allowlist: { added: number; skipped: number } | undefined;
+  if (options?.updateAllowlist) {
+    const result = await syncAllowlistFromDirectory();
+    if (!("error" in result)) {
+      allowlist = { added: result.added, skipped: result.skipped };
+    }
+  }
+
+  return { success: true, summary, allowlist };
 }
 
 // ============================================================

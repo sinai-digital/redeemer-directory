@@ -243,3 +243,112 @@ export async function syncAllowlistFromDirectory() {
   revalidatePath("/admin/allowlist");
   return { added: newEmails.length, skipped: memberEmails.length - newEmails.length };
 }
+
+export async function bulkCreateAccounts(defaultPassword: string) {
+  await requireAdmin();
+  const adminClient = createAdminClient();
+
+  if (!defaultPassword || defaultPassword.length < 8) {
+    return { error: "Password must be at least 8 characters" };
+  }
+
+  // Fetch all members with non-null emails
+  const members = await fetchAll(adminClient, "members", {
+    select: "id, email, first_name, last_name",
+    modify: (q) => q.not("email", "is", null),
+  });
+
+  // Deduplicate by email (lowercase)
+  const seen = new Set<string>();
+  const uniqueMembers = members.filter((m: any) => {
+    const email = m.email.toLowerCase();
+    if (seen.has(email)) return false;
+    seen.add(email);
+    return true;
+  });
+
+  // Get existing auth users to skip
+  const { data: existingProfiles } = await adminClient
+    .from("profiles")
+    .select("email");
+
+  const existingEmails = new Set(
+    (existingProfiles || []).map((p: any) => p.email.toLowerCase())
+  );
+
+  const toCreate = uniqueMembers.filter(
+    (m: any) => !existingEmails.has(m.email.toLowerCase())
+  );
+
+  if (toCreate.length === 0) {
+    return { created: 0, skipped: uniqueMembers.length, errors: [] };
+  }
+
+  let created = 0;
+  const errors: string[] = [];
+
+  for (const member of toCreate as any[]) {
+    const { error } = await adminClient.auth.admin.createUser({
+      email: member.email.toLowerCase(),
+      password: defaultPassword,
+      email_confirm: true,
+      user_metadata: {
+        display_name: `${member.first_name} ${member.last_name}`.trim(),
+      },
+    });
+
+    if (error) {
+      // Skip duplicates silently, report other errors
+      if (!error.message.includes("already been registered")) {
+        errors.push(`${member.email}: ${error.message}`);
+      }
+    } else {
+      created++;
+
+      // Link the member to their new profile via email match
+      const { data: profile } = await adminClient
+        .from("profiles")
+        .select("id")
+        .eq("email", member.email.toLowerCase())
+        .single();
+
+      if (profile) {
+        await adminClient
+          .from("members")
+          .update({ profile_id: profile.id })
+          .eq("id", member.id);
+      }
+    }
+  }
+
+  // Also ensure all these emails are on the allowlist
+  const { data: existingAllowlist } = await adminClient
+    .from("auth_allowlist")
+    .select("email");
+
+  const allowlistEmails = new Set(
+    (existingAllowlist || []).map((a: any) => a.email.toLowerCase())
+  );
+
+  const newAllowlistEmails = uniqueMembers
+    .map((m: any) => m.email.toLowerCase())
+    .filter((e: string) => !allowlistEmails.has(e));
+
+  if (newAllowlistEmails.length > 0) {
+    for (let i = 0; i < newAllowlistEmails.length; i += 100) {
+      const chunk = newAllowlistEmails.slice(i, i + 100).map((email: string) => ({
+        email,
+      }));
+      await adminClient.from("auth_allowlist").insert(chunk);
+    }
+  }
+
+  revalidatePath("/admin/allowlist");
+  revalidatePath("/admin/members");
+
+  return {
+    created,
+    skipped: uniqueMembers.length - toCreate.length,
+    errors,
+  };
+}

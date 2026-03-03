@@ -46,9 +46,17 @@ export function LoginForm() {
         </div>
         <h2 className="text-xl font-semibold font-heading">Check your email</h2>
         <p className="text-neutral-700">
-          We sent a magic link to <strong>{sentEmail}</strong>. Click the link in
-          the email to sign in.
+          We sent a sign-in link to <strong>{sentEmail}</strong>.
         </p>
+        <div className="bg-neutral-50 border border-neutral-200 rounded-md px-4 py-3 text-sm text-neutral-600 text-left space-y-1.5">
+          <p>
+            Look for an email from <strong>Supabase</strong> with the subject{" "}
+            <strong>&ldquo;Sign in to Redeemer Church Directory&rdquo;</strong>.
+          </p>
+          <p>
+            Check your spam or junk folder if you don&apos;t see it within 1–2 minutes.
+          </p>
+        </div>
         <button
           onClick={() => {
             setMagicLinkSent(false);

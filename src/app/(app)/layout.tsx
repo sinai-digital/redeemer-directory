@@ -22,5 +22,10 @@ export default async function AppLayout({
     .eq("id", user.id)
     .single();
 
+  // Force onboarding before accessing any app pages
+  if (profile && !profile.is_onboarded) {
+    redirect("/onboarding");
+  }
+
   return <AppShell profile={profile}>{children}</AppShell>;
 }

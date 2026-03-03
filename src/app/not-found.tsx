@@ -12,8 +12,8 @@ export default function NotFound() {
       <p className="text-neutral-700 mb-8 max-w-md">
         The page you&apos;re looking for doesn&apos;t exist or has been moved.
       </p>
-      <Link href="/forum">
-        <Button>Go to Forum</Button>
+      <Link href="/directory">
+        <Button>Go to Directory</Button>
       </Link>
     </div>
   );

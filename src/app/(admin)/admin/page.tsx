@@ -26,13 +26,7 @@ export default async function AdminPage() {
       href: "/admin/members",
       color: "text-blue-700 bg-blue-100",
     },
-    {
-      label: "Forum Posts",
-      value: stats.postCount,
-      icon: MessageSquare,
-      href: "/admin/forum",
-      color: "text-emerald-700 bg-emerald-100",
-    },
+    // { label: "Forum Posts", value: stats.postCount, icon: MessageSquare, href: "/admin/forum", color: "text-emerald-700 bg-emerald-100" },  // Hidden for initial launch
     {
       label: "Allowlist",
       value: `${stats.claimedCount}/${stats.allowlistCount}`,
@@ -50,7 +44,7 @@ export default async function AdminPage() {
         description="Manage your church directory and community"
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {statCards.map((stat) => (
           <Link key={stat.label} href={stat.href}>
             <Card hover>
@@ -79,7 +73,7 @@ export default async function AdminPage() {
         ))}
       </div>
 
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <Link href="/admin/sync">
           <Card hover>
             <CardContent className="pt-5 text-center">
@@ -118,6 +112,7 @@ export default async function AdminPage() {
             </CardContent>
           </Card>
         </Link>
+        {/* Hidden for initial launch — re-enable when forum is ready
         <Link href="/admin/forum">
           <Card hover>
             <CardContent className="pt-5 text-center">
@@ -129,6 +124,7 @@ export default async function AdminPage() {
             </CardContent>
           </Card>
         </Link>
+        */}
       </div>
     </div>
   );

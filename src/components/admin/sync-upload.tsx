@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Upload, FileText, AlertTriangle, CheckCircle, Users, Home, X } from "lucide-react";
+import { Upload, FileText, AlertTriangle, CheckCircle, Users, Home, X, Mail } from "lucide-react";
 import { parseSubsplashCSV } from "@/lib/utils/csv-parser";
 import { previewSync, executeSync } from "@/lib/actions/sync";
 import type { SubsplashPerson, SyncPreview } from "@/lib/types";
@@ -19,6 +19,7 @@ export function SyncUpload() {
   const [error, setError] = useState<string | null>(null);
   const [summary, setSummary] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [updateAllowlist, setUpdateAllowlist] = useState(true);
 
   const handleFileSelect = useCallback(async (file: File) => {
     setError(null);
@@ -73,8 +74,8 @@ export function SyncUpload() {
     setError(null);
 
     try {
-      const result = await executeSync(rows, filename);
-      setSummary(result.summary);
+      const result = await executeSync(rows, filename, { updateAllowlist });
+      setSummary({ ...result.summary, allowlist: result.allowlist });
       setState("complete");
     } catch (e: any) {
       setError(e.message || "Sync failed");
@@ -89,6 +90,7 @@ export function SyncUpload() {
     setPreview(null);
     setError(null);
     setSummary(null);
+    setUpdateAllowlist(true);
   };
 
   // Upload state
@@ -258,7 +260,24 @@ export function SyncUpload() {
             </div>
           )}
 
-          <div className="mt-6 flex items-center gap-3">
+          <label className="mt-6 flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={updateAllowlist}
+              onChange={(e) => setUpdateAllowlist(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+            />
+            <div>
+              <span className="text-sm font-medium text-neutral-900">
+                Add new emails to login allowlist
+              </span>
+              <p className="text-xs text-neutral-500 mt-0.5">
+                Members with email addresses will be able to sign in via magic link
+              </p>
+            </div>
+          </label>
+
+          <div className="mt-4 flex items-center gap-3">
             <Button onClick={handleConfirm}>Confirm Sync</Button>
             <Button variant="secondary" onClick={handleReset}>
               Cancel
@@ -324,6 +343,14 @@ export function SyncUpload() {
                 {summary.families_updated} updated, {summary.families_removed}{" "}
                 removed
               </p>
+              {summary.allowlist && (
+                <p className="flex items-center justify-center gap-1.5 pt-1">
+                  <Mail className="h-3.5 w-3.5" />
+                  {summary.allowlist.added > 0
+                    ? `${summary.allowlist.added} new email${summary.allowlist.added !== 1 ? "s" : ""} added to login allowlist`
+                    : "All emails already on login allowlist"}
+                </p>
+              )}
             </div>
             <div className="flex items-center justify-center gap-3">
               <Button variant="secondary" onClick={handleReset}>

@@ -59,13 +59,55 @@ export async function loginWithPassword(formData: FormData) {
     return { error: "Invalid email or password" };
   }
 
-  redirect("/forum");
+  redirect("/directory");
 }
 
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/login");
+}
+
+export async function completeOnboarding(formData: FormData) {
+  const password = formData.get("password") as string;
+  const confirmPassword = formData.get("confirmPassword") as string;
+  const displayName = formData.get("displayName") as string;
+
+  if (!password || password.length < 8) {
+    return { error: "Password must be at least 8 characters" };
+  }
+
+  if (password !== confirmPassword) {
+    return { error: "Passwords do not match" };
+  }
+
+  if (!displayName || !displayName.trim()) {
+    return { error: "Display name is required" };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return { error: "Not authenticated" };
+
+  // Set the user's new password
+  const { error: pwError } = await supabase.auth.updateUser({ password });
+  if (pwError) return { error: pwError.message };
+
+  // Update profile: set display name and mark as onboarded
+  const { error: profileError } = await supabase
+    .from("profiles")
+    .update({
+      display_name: displayName.trim(),
+      is_onboarded: true,
+    })
+    .eq("id", user.id);
+
+  if (profileError) return { error: profileError.message };
+
+  redirect("/directory");
 }
 
 export async function updatePassword(formData: FormData) {

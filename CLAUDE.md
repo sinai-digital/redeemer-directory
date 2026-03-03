@@ -42,3 +42,13 @@ DDL cannot be run via the REST API. Options:
 - Supabase (auth, database, storage)
 - Fonts: Literata (headings), Source Sans (body)
 - Color palette: Navy primary (#22313f–#f0f4f8), Gold accent (#d4b030–#f7e47f), Neutral grays
+
+## Forum (Hidden for Initial Launch)
+
+Forum functionality is fully built (pages, components, server actions) but **hidden from navigation** for the initial directory launch. All forum code remains intact under `src/app/(app)/forum/`, `src/components/forum/`, `src/lib/actions/forum.ts`, and `src/app/(admin)/admin/forum/`.
+
+**To re-enable the forum:**
+1. `src/components/layout/sidebar.tsx` — Uncomment the Forum entry in `navItems`; re-add `MessageSquare` to the lucide-react import
+2. `src/components/layout/bottom-nav.tsx` — Uncomment the Forum entry in `items`; re-add `MessageSquare` to the import
+3. `src/app/(admin)/admin/page.tsx` — Uncomment the "Forum Posts" stat card and the "Moderate Forum" action card; change grid columns back to `lg:grid-cols-4`
+4. Optionally update default redirects in `middleware.ts`, `auth.ts`, `page.tsx` back to `/forum` if forum should be the landing page

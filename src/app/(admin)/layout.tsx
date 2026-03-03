@@ -22,6 +22,10 @@ export default async function AdminLayout({
     .eq("id", user.id)
     .single();
 
+  if (profile && !profile.is_onboarded) {
+    redirect("/onboarding");
+  }
+
   if (!profile || !["admin", "super_admin"].includes(profile.role)) {
     redirect("/directory");
   }
