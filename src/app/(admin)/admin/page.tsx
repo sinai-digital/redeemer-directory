@@ -1,7 +1,7 @@
 import { getAdminStats } from "@/lib/actions/admin";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, Home, MessageSquare, Mail, RefreshCw } from "lucide-react";
+import { Users, Home, MessageSquare, Mail, RefreshCw, Send } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {
@@ -35,6 +35,14 @@ export default async function AdminPage() {
       color: "text-amber-700 bg-amber-100",
       subtitle: "claimed",
     },
+    {
+      label: "Invited",
+      value: `${stats.invitedCount}/${stats.allowlistCount}`,
+      icon: Send,
+      href: "/admin/invites",
+      color: "text-emerald-700 bg-emerald-100",
+      subtitle: "sent",
+    },
   ];
 
   return (
@@ -44,7 +52,7 @@ export default async function AdminPage() {
         description="Manage your church directory and community"
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map((stat) => (
           <Link key={stat.label} href={stat.href}>
             <Card hover>
@@ -73,7 +81,7 @@ export default async function AdminPage() {
         ))}
       </div>
 
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Link href="/admin/sync">
           <Card hover>
             <CardContent className="pt-5 text-center">
@@ -97,6 +105,17 @@ export default async function AdminPage() {
               <h3 className="font-semibold font-heading">Manage Allowlist</h3>
               <p className="text-sm text-neutral-700 mt-1">
                 Invite new members by email
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link href="/admin/invites">
+          <Card hover>
+            <CardContent className="pt-5 text-center">
+              <Send className="h-8 w-8 mx-auto text-primary-800 mb-2" />
+              <h3 className="font-semibold font-heading">Send Invites</h3>
+              <p className="text-sm text-neutral-700 mt-1">
+                Email invite links to members
               </p>
             </CardContent>
           </Card>

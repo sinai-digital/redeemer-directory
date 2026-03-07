@@ -154,8 +154,11 @@ export function SyncUpload() {
             </Button>
           </div>
 
-          <p className="text-sm text-neutral-700 mb-4">
+          <p className="text-sm text-neutral-700 mb-2">
             <span className="font-medium">{filename}</span> — {rows.length} rows parsed
+          </p>
+          <p className="text-xs text-neutral-500 mb-4">
+            Only members and regular attenders are added to the directory. Existing entries are always updated regardless of status.
           </p>
 
           {/* Summary cards */}

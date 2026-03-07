@@ -22,8 +22,12 @@ export async function GET(request: Request) {
           .single();
 
         if (profile && !profile.is_onboarded) {
-          return NextResponse.redirect(`${origin}/profile`);
+          // First-time user — full onboarding wizard
+          return NextResponse.redirect(`${origin}/onboarding`);
         }
+
+        // Already onboarded — came via magic link, so prompt to set a password
+        return NextResponse.redirect(`${origin}/onboarding?set-password=1`);
       }
 
       return NextResponse.redirect(`${origin}${next}`);

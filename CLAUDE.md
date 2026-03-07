@@ -2,7 +2,7 @@
 
 ## Supabase Database Access
 
-The Supabase instance for this project is hosted at `fvmlpzfqdfdczdvcrxqp.supabase.co`.
+The Supabase instance for this project is hosted at `bexgfurhqepwsrjuibvr.supabase.co`.
 
 ### How to run data operations (INSERT, UPDATE, DELETE, SELECT)
 

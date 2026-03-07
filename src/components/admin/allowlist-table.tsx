@@ -10,6 +10,7 @@ import { Trash2 } from "lucide-react";
 interface AllowlistEntry {
   email: string;
   claimed_at: string | null;
+  invite_sent_at: string | null;
   created_at: string;
 }
 
@@ -47,6 +48,9 @@ export function AllowlistTable({ allowlist }: AllowlistTableProps) {
               Status
             </th>
             <th className="text-left py-2 px-3 font-semibold text-neutral-700">
+              Invited
+            </th>
+            <th className="text-left py-2 px-3 font-semibold text-neutral-700">
               Added
             </th>
             <th className="text-right py-2 px-3 font-semibold text-neutral-700">
@@ -66,6 +70,13 @@ export function AllowlistTable({ allowlist }: AllowlistTableProps) {
                   <Badge variant="success">Claimed</Badge>
                 ) : (
                   <Badge variant="warning">Pending</Badge>
+                )}
+              </td>
+              <td className="py-2 px-3 text-neutral-700">
+                {entry.invite_sent_at ? (
+                  <span className="text-xs">{formatFullDate(entry.invite_sent_at)}</span>
+                ) : (
+                  <span className="text-xs text-neutral-400">—</span>
                 )}
               </td>
               <td className="py-2 px-3 text-neutral-700">

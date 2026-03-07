@@ -8,7 +8,14 @@ export const metadata = {
   title: "Welcome | Redeemer Church Directory",
 };
 
-export default async function OnboardingPage() {
+export default async function OnboardingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const params = await searchParams;
+  const isSetPassword = params["set-password"] === "1";
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -22,19 +29,21 @@ export default async function OnboardingPage() {
     .eq("id", user.id)
     .single();
 
-  // Already onboarded — send them to the directory
-  if (profile?.is_onboarded) redirect("/directory");
+  // Already onboarded and NOT here to set a password — send to directory
+  if (profile?.is_onboarded && !isSetPassword) redirect("/directory");
 
   // Try to suggest a name from the linked member record
   const { data: member } = await supabase
     .from("members")
-    .select("first_name, last_name")
+    .select("id, first_name, last_name, show_email, show_phone, show_birthday, show_address, email, phone, birthday, address")
     .eq("profile_id", user.id)
     .single();
 
   const suggestedName = member
     ? `${member.first_name} ${member.last_name}`.trim()
     : profile?.display_name || "";
+
+  const mode = profile?.is_onboarded ? "set-password" : "onboarding";
 
   return (
     <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
@@ -48,16 +57,24 @@ export default async function OnboardingPage() {
             className="mx-auto mb-4"
           />
           <h1 className="text-2xl font-bold font-heading text-primary-900">
-            Welcome to the Directory
+            {mode === "set-password"
+              ? "Set Your Password"
+              : "Welcome to the Directory"}
           </h1>
           <p className="text-neutral-700 mt-2">
-            Set up your account to get started.
+            {mode === "set-password"
+              ? "Choose a password so you can sign in directly next time."
+              : "Set up your account to get started."}
           </p>
         </div>
 
         <Card>
           <CardContent className="pt-6">
-            <OnboardingForm suggestedName={suggestedName} />
+            <OnboardingForm
+              suggestedName={suggestedName}
+              member={member}
+              mode={mode}
+            />
           </CardContent>
         </Card>
 

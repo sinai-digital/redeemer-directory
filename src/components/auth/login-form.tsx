@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { loginWithMagicLink, loginWithPassword } from "@/lib/actions/auth";
-import { Mail, Lock, ArrowRight } from "lucide-react";
+import { Mail, Lock, ArrowRight, KeyRound } from "lucide-react";
 
 export function LoginForm() {
   const [mode, setMode] = useState<"magic" | "password">("magic");
@@ -12,6 +12,7 @@ export function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [sentEmail, setSentEmail] = useState("");
+  const [forgotPassword, setForgotPassword] = useState(false);
 
   async function handleMagicLink(formData: FormData) {
     setLoading(true);
@@ -78,6 +79,12 @@ export function LoginForm() {
         </div>
       )}
 
+      {forgotPassword && mode === "magic" && (
+        <div className="bg-primary-50 border border-primary-200 rounded-md px-4 py-3 text-sm text-primary-800">
+          Enter your email to receive a sign-in link. You can change your password once logged in.
+        </div>
+      )}
+
       {mode === "magic" ? (
         <form action={handleMagicLink} className="space-y-4">
           <Input
@@ -120,6 +127,18 @@ export function LoginForm() {
             <Lock className="h-4 w-4" />
             Sign in
           </Button>
+          <button
+            type="button"
+            onClick={() => {
+              setForgotPassword(true);
+              setMode("magic");
+              setError(null);
+            }}
+            className="block w-full text-center text-xs text-neutral-500 hover:text-primary-800 mt-2 transition-colors"
+          >
+            <KeyRound className="h-3 w-3 inline mr-1" />
+            Forgot your password?
+          </button>
         </form>
       )}
 
@@ -136,6 +155,7 @@ export function LoginForm() {
         onClick={() => {
           setMode(mode === "magic" ? "password" : "magic");
           setError(null);
+          setForgotPassword(false);
         }}
         className="w-full flex items-center justify-center gap-2 text-sm text-neutral-700 hover:text-primary-800 transition-colors"
       >

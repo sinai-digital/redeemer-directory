@@ -38,6 +38,9 @@ async function requireAdmin() {
   return user;
 }
 
+// Only members and regular attenders get directory entries
+const DIRECTORY_STATUSES = new Set<MemberStatus>(["member", "regular_attender"]);
+
 function mapMembershipStatus(raw: string): MemberStatus | null {
   const normalized = raw.toLowerCase().trim();
   const map: Record<string, MemberStatus> = {
@@ -151,6 +154,13 @@ export async function previewSync(
     const existing = existingFamiliesBySubsplash.get(householdId);
     const name = deriveFamilyName(members);
     if (!existing) {
+      // Only add new families if they have at least one qualifying member
+      const hasQualifying = members.some((m) => {
+        const status = mapMembershipStatus(m.membership_status);
+        return status && DIRECTORY_STATUSES.has(status);
+      });
+      if (!hasQualifying) continue;
+
       familyChanges.added.push({ household_id: householdId, family_name: name, type: "added" });
     } else {
       // Check if family name changed
@@ -180,6 +190,10 @@ export async function previewSync(
   for (const row of rows) {
     const existing = existingMembersBySubsplash.get(row.person_id);
     if (!existing) {
+      // Only add new entries for members and regular attenders
+      const status = mapMembershipStatus(row.membership_status);
+      if (!status || !DIRECTORY_STATUSES.has(status)) continue;
+
       memberChanges.added.push({
         person_id: row.person_id,
         first_name: row.first_name,
@@ -332,6 +346,13 @@ export async function executeSync(
         familiesUpdated++;
       }
     } else {
+      // Only add new families if they have at least one qualifying member
+      const hasQualifying = members.some((m) => {
+        const status = mapMembershipStatus(m.membership_status);
+        return status && DIRECTORY_STATUSES.has(status);
+      });
+      if (!hasQualifying) continue;
+
       newFamilies.push(familyData);
     }
   }
@@ -397,6 +418,9 @@ export async function executeSync(
       // Include the existing id so upsert matches on PK; exclude show_* and profile_id
       existingMemberRows.push({ id: existing.id, ...memberData });
     } else {
+      // Only create new entries for members and regular attenders
+      if (!memberData.member_status || !DIRECTORY_STATUSES.has(memberData.member_status)) continue;
+
       newMemberRows.push({
         ...memberData,
         show_email: true,

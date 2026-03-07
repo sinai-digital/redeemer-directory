@@ -107,6 +107,22 @@ export async function completeOnboarding(formData: FormData) {
 
   if (profileError) return { error: profileError.message };
 
+  // Update privacy settings if member record exists
+  const memberId = formData.get("memberId") as string;
+  if (memberId) {
+    const adminClient = createAdminClient();
+    await adminClient
+      .from("members")
+      .update({
+        show_email: formData.get("showEmail") === "on",
+        show_phone: formData.get("showPhone") === "on",
+        show_birthday: formData.get("showBirthday") === "on",
+        show_address: formData.get("showAddress") === "on",
+      })
+      .eq("id", memberId)
+      .eq("profile_id", user.id);
+  }
+
   redirect("/directory");
 }
 
