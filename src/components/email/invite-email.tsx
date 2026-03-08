@@ -15,10 +15,11 @@ import * as React from "react";
 
 interface InviteEmailProps {
   firstName: string;
+  email: string;
   loginUrl: string;
 }
 
-export function InviteEmail({ firstName, loginUrl }: InviteEmailProps) {
+export function InviteEmail({ firstName, email, loginUrl }: InviteEmailProps) {
   return (
     <Html>
       <Head />
@@ -50,7 +51,7 @@ export function InviteEmail({ firstName, loginUrl }: InviteEmailProps) {
           </Text>
 
           <Section style={buttonSection}>
-            <Button style={button} href={loginUrl}>
+            <Button style={button} href={`${loginUrl}?mode=magic&email=${encodeURIComponent(email)}`}>
               Sign In to the Directory
             </Button>
           </Section>
@@ -58,6 +59,10 @@ export function InviteEmail({ firstName, loginUrl }: InviteEmailProps) {
           <Text style={smallText}>
             You&apos;ll be asked to set a password and review your privacy
             settings when you first sign in.
+          </Text>
+
+          <Text style={smallText}>
+            Or visit directory.redeemerriverview.org and sign in with your email.
           </Text>
 
           <Hr style={hr} />

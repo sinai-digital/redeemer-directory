@@ -6,8 +6,13 @@ import { Input } from "@/components/ui/input";
 import { loginWithMagicLink, loginWithPassword } from "@/lib/actions/auth";
 import { Mail, Lock, ArrowRight, KeyRound } from "lucide-react";
 
-export function LoginForm() {
-  const [mode, setMode] = useState<"magic" | "password">("magic");
+interface LoginFormProps {
+  defaultMode?: "magic" | "password";
+  defaultEmail?: string;
+}
+
+export function LoginForm({ defaultMode, defaultEmail }: LoginFormProps) {
+  const [mode, setMode] = useState<"magic" | "password">(defaultMode || "magic");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
@@ -51,8 +56,7 @@ export function LoginForm() {
         </p>
         <div className="bg-neutral-50 border border-neutral-200 rounded-md px-4 py-3 text-sm text-neutral-600 text-left space-y-1.5">
           <p>
-            Look for an email from <strong>Supabase</strong> with the subject{" "}
-            <strong>&ldquo;Sign in to Redeemer Church Directory&rdquo;</strong>.
+            Look for an email from <strong>Redeemer Church Directory</strong> with a sign-in link.
           </p>
           <p>
             Check your spam or junk folder if you don&apos;t see it within 1–2 minutes.
@@ -92,7 +96,8 @@ export function LoginForm() {
             name="email"
             type="email"
             label="Email address"
-            placeholder="matt.pike@example.com"
+            placeholder="you@example.com"
+            defaultValue={defaultEmail}
             required
             autoComplete="email"
             autoFocus
@@ -109,7 +114,8 @@ export function LoginForm() {
             name="email"
             type="email"
             label="Email address"
-            placeholder="matt.pike@example.com"
+            placeholder="you@example.com"
+            defaultValue={defaultEmail}
             required
             autoComplete="email"
             autoFocus

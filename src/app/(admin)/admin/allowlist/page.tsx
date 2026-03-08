@@ -4,7 +4,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { AllowlistTable } from "@/components/admin/allowlist-table";
 import { AddToAllowlistForm } from "@/components/admin/add-allowlist-form";
 import { SyncAllowlistButton } from "@/components/admin/sync-allowlist-button";
-import { BulkCreateAccounts } from "@/components/admin/bulk-create-accounts";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -31,19 +30,7 @@ export default async function AllowlistPage() {
       />
 
       <div className="space-y-6">
-        <Card>
-          <CardContent className="pt-5">
-            <h3 className="font-semibold font-heading mb-2">Bulk Create Accounts</h3>
-            <p className="text-sm text-neutral-700 mb-3">
-              Create login accounts for all directory members with email addresses.
-              Each account is set with a default password that members must change on first login.
-              Members who already have accounts are skipped.
-            </p>
-            <BulkCreateAccounts />
-          </CardContent>
-        </Card>
-
-        <Card>
+<Card>
           <CardContent className="pt-5">
             <h3 className="font-semibold font-heading mb-2">Sync Allowlist from Directory</h3>
             <p className="text-sm text-neutral-700 mb-3">

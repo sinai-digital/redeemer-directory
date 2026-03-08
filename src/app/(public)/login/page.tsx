@@ -5,7 +5,12 @@ export const metadata = {
   title: "Sign In | Redeemer Church Directory",
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ mode?: string; email?: string }>;
+}) {
+  const { mode, email } = await searchParams;
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left brand panel */}
@@ -58,7 +63,10 @@ export default function LoginPage() {
             Sign In
           </h2>
 
-          <LoginForm />
+          <LoginForm
+            defaultMode={mode === "magic" || mode === "password" ? mode : undefined}
+            defaultEmail={email}
+          />
 
           {/* Footer */}
           <p className="text-xs text-neutral-700 mt-8">
