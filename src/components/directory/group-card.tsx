@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +9,7 @@ interface GroupCardProps {
   group: CommunityGroup & { community_group_members?: { count: number }[] };
 }
 
-export function GroupCard({ group }: GroupCardProps) {
+export const GroupCard = memo(function GroupCard({ group }: GroupCardProps) {
   const memberCount = group.community_group_members?.[0]?.count || 0;
 
   return (
@@ -50,4 +51,4 @@ export function GroupCard({ group }: GroupCardProps) {
     </Card>
     </Link>
   );
-}
+});

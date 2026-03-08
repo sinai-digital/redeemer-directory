@@ -36,7 +36,7 @@ export function DirectoryClient({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [search, setSearch] = useState(searchParams.get("q") || "");
+  const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>(
     (searchParams.get("view") as ViewMode) || "grid"
   );
@@ -59,7 +59,7 @@ export function DirectoryClient({
     const next = [...chips, trimmed];
     setChips(next);
     setSearch("");
-    updateParams({ q: null, chips: next.join(",") });
+    updateParams({ chips: next.join(",") });
   }
 
   function removeChip(term: string) {
@@ -70,6 +70,7 @@ export function DirectoryClient({
 
   function clearAllChips() {
     setChips([]);
+    setSearch("");
     updateParams({ chips: null });
   }
 
@@ -86,12 +87,12 @@ export function DirectoryClient({
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   }
 
-  const tabs = [
+  const tabs = useMemo(() => [
     { id: "members" as TabId, label: "Members", count: members.length },
     { id: "families" as TabId, label: "Families", count: families.length },
-    { id: "groups" as TabId, label: "Groups", count: communityGroups.length },
-    { id: "ministries" as TabId, label: "Ministries", count: ministries.length },
-  ];
+    ...(communityGroups.length > 0 ? [{ id: "groups" as TabId, label: "Groups", count: communityGroups.length }] : []),
+    ...(ministries.length > 0 ? [{ id: "ministries" as TabId, label: "Ministries", count: ministries.length }] : []),
+  ], [members.length, families.length, communityGroups.length, ministries.length]);
 
   // Collect all search terms: chips + live typing
   const allTerms = useMemo(() => {
@@ -125,8 +126,8 @@ export function DirectoryClient({
         const last = (m.last_name ?? "").toLowerCase();
         const full = `${first} ${last}`;
         const fam = (m.family_name ?? "").toLowerCase();
-        return allTerms.some(
-          (q) => first.includes(q) || last.includes(q) || full.includes(q) || fam.includes(q)
+        return allTerms.some((q) =>
+          first.includes(q) || last.includes(q) || full.includes(q) || fam.includes(q)
         );
       });
     }
@@ -148,6 +149,70 @@ export function DirectoryClient({
       members.map((m) => (m.last_name ?? "")[0]?.toUpperCase()).filter(Boolean)
     )].sort();
   }, [activeTab, families, members]);
+
+  const membersContent = useMemo(() => {
+    if (filteredMembers.length === 0) {
+      return <EmptyState icon={<Users className="h-12 w-12" />} message="No members found" />;
+    }
+    return viewMode === "grid" ? (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filteredMembers.map((member) => (
+          <MemberCard key={member.id} member={member} />
+        ))}
+      </div>
+    ) : (
+      <div className="space-y-2">
+        {filteredMembers.map((member) => (
+          <MemberCard key={member.id} member={member} variant="list" />
+        ))}
+      </div>
+    );
+  }, [filteredMembers, viewMode]);
+
+  const familiesContent = useMemo(() => {
+    if (filteredFamilies.length === 0) {
+      return <EmptyState icon={<Users className="h-12 w-12" />} message="No families found" />;
+    }
+    return viewMode === "grid" ? (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filteredFamilies.map((family) => (
+          <FamilyCard key={family.id} family={family} />
+        ))}
+      </div>
+    ) : (
+      <div className="space-y-2">
+        {filteredFamilies.map((family) => (
+          <FamilyCard key={family.id} family={family} variant="list" />
+        ))}
+      </div>
+    );
+  }, [filteredFamilies, viewMode]);
+
+  const groupsContent = useMemo(() => {
+    if (communityGroups.length === 0) {
+      return <EmptyState icon={<ChurchIcon className="h-12 w-12" />} message="No community groups yet" />;
+    }
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {communityGroups.map((group) => (
+          <GroupCard key={group.id} group={group} />
+        ))}
+      </div>
+    );
+  }, [communityGroups]);
+
+  const ministriesContent = useMemo(() => {
+    if (ministries.length === 0) {
+      return <EmptyState icon={<Heart className="h-12 w-12" />} message="No ministries yet" />;
+    }
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {ministries.map((ministry) => (
+          <MinistryCard key={ministry.id} ministry={ministry} />
+        ))}
+      </div>
+    );
+  }, [ministries]);
 
   return (
     <div>
@@ -178,7 +243,6 @@ export function DirectoryClient({
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
-                updateParams({ q: e.target.value || null });
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && search.trim()) {
@@ -285,73 +349,10 @@ export function DirectoryClient({
         )}
 
         {/* Content */}
-        {activeTab === "families" && (
-          <div className="no-print">
-            {filteredFamilies.length === 0 ? (
-              <EmptyState icon={<Users className="h-12 w-12" />} message="No families found" />
-            ) : viewMode === "grid" ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredFamilies.map((family) => (
-                  <FamilyCard key={family.id} family={family} />
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {filteredFamilies.map((family) => (
-                  <FamilyCard key={family.id} family={family} variant="list" />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === "members" && (
-          <div className="no-print">
-            {filteredMembers.length === 0 ? (
-              <EmptyState icon={<Users className="h-12 w-12" />} message="No members found" />
-            ) : viewMode === "grid" ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredMembers.map((member) => (
-                  <MemberCard key={member.id} member={member} />
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {filteredMembers.map((member) => (
-                  <MemberCard key={member.id} member={member} variant="list" />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === "groups" && (
-          <div className="no-print">
-            {communityGroups.length === 0 ? (
-              <EmptyState icon={<ChurchIcon className="h-12 w-12" />} message="No community groups yet" />
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {communityGroups.map((group) => (
-                  <GroupCard key={group.id} group={group} />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === "ministries" && (
-          <div className="no-print">
-            {ministries.length === 0 ? (
-              <EmptyState icon={<Heart className="h-12 w-12" />} message="No ministries yet" />
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {ministries.map((ministry) => (
-                  <MinistryCard key={ministry.id} ministry={ministry} />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+        {activeTab === "families" && <div className="no-print">{familiesContent}</div>}
+        {activeTab === "members" && <div className="no-print">{membersContent}</div>}
+        {activeTab === "groups" && <div className="no-print">{groupsContent}</div>}
+        {activeTab === "ministries" && <div className="no-print">{ministriesContent}</div>}
 
         {/* Print-only compact directory listing */}
         <div className="print-only">

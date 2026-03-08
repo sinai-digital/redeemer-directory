@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +16,7 @@ const categoryColors: Record<string, string> = {
   leadership: "default",
 };
 
-export function MinistryCard({ ministry }: MinistryCardProps) {
+export const MinistryCard = memo(function MinistryCard({ ministry }: MinistryCardProps) {
   const memberCount = ministry.ministry_members?.[0]?.count || 0;
   const badgeVariant = (categoryColors[ministry.category || ""] || "default") as
     | "primary"
@@ -48,4 +49,4 @@ export function MinistryCard({ ministry }: MinistryCardProps) {
     </Card>
     </Link>
   );
-}
+});
