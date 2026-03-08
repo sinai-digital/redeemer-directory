@@ -318,7 +318,10 @@ export function SyncUpload() {
             </svg>
             <p className="font-semibold font-heading">Syncing directory...</p>
             <p className="text-sm text-neutral-700 mt-1">
-              Processing {rows.length} people. This may take a moment.
+              Syncing {preview
+                ? preview.members.added.length + preview.members.updated.length +
+                  preview.members.removed.length + preview.members.unchanged.length
+                : rows.length} people to directory. This may take a moment.
             </p>
           </div>
         </CardContent>

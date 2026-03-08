@@ -82,7 +82,7 @@ export function SyncHistory({ entries }: SyncHistoryProps) {
                     )}
                   </div>
                   <p className="text-xs text-neutral-500 mt-0.5">
-                    {entry.csv_filename} — {entry.csv_row_count} rows
+                    {entry.csv_filename} — {entry.summary.members_added + entry.summary.members_updated} people synced
                     {entry.performer && (
                       <> by {entry.performer.display_name || entry.performer.email}</>
                     )}
