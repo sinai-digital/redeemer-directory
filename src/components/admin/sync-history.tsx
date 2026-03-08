@@ -89,7 +89,7 @@ export function SyncHistory({ entries }: SyncHistoryProps) {
                   </p>
                   <div className="flex flex-wrap gap-2 mt-1.5">
                     <Badge variant="success">
-                      +{entry.summary.members_added} members
+                      +{entry.summary.members_added} people
                     </Badge>
                     <Badge variant="primary">
                       ~{entry.summary.members_updated} updated

@@ -164,17 +164,17 @@ export function SyncUpload() {
           {/* Summary cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             <SummaryCard
-              label="Members Added"
+              label="People Added"
               count={preview.members.added.length}
               variant="success"
             />
             <SummaryCard
-              label="Members Updated"
+              label="People Updated"
               count={preview.members.updated.length}
               variant="primary"
             />
             <SummaryCard
-              label="Members Removed"
+              label="People Removed"
               count={preview.members.removed.length}
               variant="warning"
             />
@@ -186,7 +186,7 @@ export function SyncUpload() {
           </div>
 
           <div className="text-sm text-neutral-700 mb-4">
-            <p>{preview.members.unchanged.length} members unchanged, {preview.families.unchanged.length} families unchanged</p>
+            <p>{preview.members.unchanged.length} people unchanged, {preview.families.unchanged.length} families unchanged</p>
           </div>
 
           {/* Warnings */}
@@ -195,10 +195,10 @@ export function SyncUpload() {
               <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium">
-                  {membersWithProfiles.length} member(s) to be removed have linked user accounts
+                  {membersWithProfiles.length} person(s) to be removed have linked user accounts
                 </p>
                 <p className="mt-1">
-                  These members will NOT be auto-deleted. They must be removed manually.
+                  These people will NOT be auto-deleted. They must be removed manually.
                 </p>
                 <ul className="mt-1 list-disc list-inside">
                   {membersWithProfiles.map((m) => (
@@ -214,7 +214,7 @@ export function SyncUpload() {
           {/* Detail sections */}
           {preview.members.added.length > 0 && (
             <DetailSection
-              title="New Members"
+              title="New People"
               icon={<Users className="h-4 w-4" />}
               items={preview.members.added.map(
                 (m) => `${m.first_name} ${m.last_name}`
@@ -225,7 +225,7 @@ export function SyncUpload() {
 
           {preview.members.updated.length > 0 && (
             <DetailSection
-              title="Updated Members"
+              title="Updated People"
               icon={<Users className="h-4 w-4" />}
               items={preview.members.updated.map(
                 (m) =>
@@ -237,7 +237,7 @@ export function SyncUpload() {
 
           {preview.members.removed.length > 0 && (
             <DetailSection
-              title="Removed Members"
+              title="Removed People"
               icon={<Users className="h-4 w-4" />}
               items={preview.members.removed.map(
                 (m) =>
@@ -275,7 +275,7 @@ export function SyncUpload() {
                 Add new emails to login allowlist
               </span>
               <p className="text-xs text-neutral-500 mt-0.5">
-                Members with email addresses will be able to sign in via magic link
+                People with email addresses will be able to sign in
               </p>
             </div>
           </label>
@@ -318,7 +318,7 @@ export function SyncUpload() {
             </svg>
             <p className="font-semibold font-heading">Syncing directory...</p>
             <p className="text-sm text-neutral-700 mt-1">
-              Processing {rows.length} members. This may take a moment.
+              Processing {rows.length} people. This may take a moment.
             </p>
           </div>
         </CardContent>
@@ -338,7 +338,7 @@ export function SyncUpload() {
             </h3>
             <div className="text-sm text-neutral-700 space-y-1 mb-6">
               <p>
-                {summary.members_added} members added, {summary.members_updated}{" "}
+                {summary.members_added} people added, {summary.members_updated}{" "}
                 updated, {summary.members_removed} removed
               </p>
               <p>

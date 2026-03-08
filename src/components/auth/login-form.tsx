@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { loginWithMagicLink, loginWithPassword } from "@/lib/actions/auth";
-import { Mail, Lock, ArrowRight, KeyRound } from "lucide-react";
+import { Mail, Lock, KeyRound } from "lucide-react";
 
 interface LoginFormProps {
   defaultMode?: "magic" | "password";
@@ -12,7 +12,7 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ defaultMode, defaultEmail }: LoginFormProps) {
-  const [mode, setMode] = useState<"magic" | "password">(defaultMode || "magic");
+  const [mode, setMode] = useState<"magic" | "password">(defaultMode || "password");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
@@ -96,7 +96,6 @@ export function LoginForm({ defaultMode, defaultEmail }: LoginFormProps) {
             name="email"
             type="email"
             label="Email address"
-            placeholder="you@example.com"
             defaultValue={defaultEmail}
             required
             autoComplete="email"
@@ -104,7 +103,7 @@ export function LoginForm({ defaultMode, defaultEmail }: LoginFormProps) {
           />
           <Button type="submit" variant="gold" loading={loading} className="w-full">
             <Mail className="h-4 w-4" />
-            Send magic link
+            Email me a sign-in link
           </Button>
         </form>
       ) : (
@@ -114,7 +113,6 @@ export function LoginForm({ defaultMode, defaultEmail }: LoginFormProps) {
             name="email"
             type="email"
             label="Email address"
-            placeholder="you@example.com"
             defaultValue={defaultEmail}
             required
             autoComplete="email"
@@ -172,8 +170,8 @@ export function LoginForm({ defaultMode, defaultEmail }: LoginFormProps) {
           </>
         ) : (
           <>
-            <ArrowRight className="h-3.5 w-3.5" />
-            Sign in with magic link instead
+            <Mail className="h-3.5 w-3.5" />
+            Email me a sign-in link instead
           </>
         )}
       </button>

@@ -68,11 +68,6 @@ export default async function LoginPage({
             defaultEmail={email}
           />
 
-          {/* Footer */}
-          <p className="text-xs text-neutral-700 mt-8">
-            Not a member yet? Contact the church office to be added to the directory.
-          </p>
-
           {/* Mobile-only website link */}
           <p className="text-xs mt-3 lg:hidden">
             <a
