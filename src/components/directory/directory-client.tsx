@@ -188,6 +188,7 @@ export function DirectoryClient({
                   removeChip(chips[chips.length - 1]);
                 }
               }}
+              aria-label="Search directory"
               className="w-full rounded-md border border-neutral-300 bg-white pl-9 pr-20 py-2 text-sm text-neutral-900 placeholder:text-neutral-700/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
             />
             {search.trim() && (

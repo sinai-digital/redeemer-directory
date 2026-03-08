@@ -510,10 +510,8 @@ export async function executeSync(
   }
 
   // 9. Revalidate
-  revalidatePath("/directory");
-  revalidatePath("/admin");
-  revalidatePath("/admin/members");
-  revalidatePath("/admin/sync");
+  revalidatePath("/directory", "layout");
+  revalidatePath("/admin", "layout");
 
   // 10. Optionally sync allowlist
   let allowlist: { added: number; skipped: number } | undefined;
@@ -621,10 +619,8 @@ export async function rollbackSync(historyId: string): Promise<{ success: boolea
     .update({ rolled_back_at: new Date().toISOString() })
     .eq("id", historyId);
 
-  revalidatePath("/directory");
-  revalidatePath("/admin");
-  revalidatePath("/admin/members");
-  revalidatePath("/admin/sync");
+  revalidatePath("/directory", "layout");
+  revalidatePath("/admin", "layout");
 
   return { success: true };
 }

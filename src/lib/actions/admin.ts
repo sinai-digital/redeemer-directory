@@ -330,10 +330,14 @@ export async function sendInviteEmails(batchSize: number) {
       }
 
       // Mark as sent
-      await adminClient
+      const { error: updateErr } = await adminClient
         .from("auth_allowlist")
         .update({ invite_sent_at: new Date().toISOString() })
         .eq("email", entry.email);
+
+      if (updateErr) {
+        errors.push(`${email}: sent but failed to mark as sent`);
+      }
 
       sent++;
     } catch (e: any) {

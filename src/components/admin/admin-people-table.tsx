@@ -157,6 +157,15 @@ export function AdminPeopleTable({ members }: AdminPeopleTableProps) {
               ))}
             </tr>
           </thead>
+          {sorted.length === 0 ? (
+            <tbody>
+              <tr>
+                <td colSpan={6} className="px-4 py-8 text-center text-sm text-neutral-500">
+                  No people found matching your search.
+                </td>
+              </tr>
+            </tbody>
+          ) : (
           <tbody>
             {sorted.map((member) => (
               <tr
@@ -200,6 +209,7 @@ export function AdminPeopleTable({ members }: AdminPeopleTableProps) {
               </tr>
             ))}
           </tbody>
+          )}
         </table>
       </div>
     </div>
