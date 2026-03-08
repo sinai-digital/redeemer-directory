@@ -34,8 +34,8 @@ export function PrivacyForm({ member }: PrivacyFormProps) {
   const fields = [
     { name: "showEmail", label: "Show email address", defaultChecked: member.show_email },
     { name: "showPhone", label: "Show phone number", defaultChecked: member.show_phone },
-    { name: "showBirthday", label: "Show birthday", defaultChecked: member.show_birthday },
     { name: "showAddress", label: "Show home address", defaultChecked: member.show_address },
+    { name: "showBirthday", label: "Show birthday", defaultChecked: member.show_birthday },
   ];
 
   return (

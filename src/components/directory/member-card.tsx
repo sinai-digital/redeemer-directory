@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -12,7 +13,7 @@ interface MemberCardProps {
   variant?: "grid" | "list";
 }
 
-export function MemberCard({ member, variant = "grid" }: MemberCardProps) {
+export const MemberCard = memo(function MemberCard({ member, variant = "grid" }: MemberCardProps) {
   const familyRoleLabel = member.family_role === "child" ? "Child" : "";
 
   if (variant === "list") {
@@ -23,6 +24,7 @@ export function MemberCard({ member, variant = "grid" }: MemberCardProps) {
             <Avatar
               firstName={member.first_name}
               lastName={member.last_name}
+              avatarUrl={member.avatar_url}
               size="md"
             />
             <div className="flex-1 min-w-0">
@@ -68,6 +70,7 @@ export function MemberCard({ member, variant = "grid" }: MemberCardProps) {
             <Avatar
               firstName={member.first_name}
               lastName={member.last_name}
+              avatarUrl={member.avatar_url}
               size="lg"
             />
             <div className="flex-1 min-w-0">
@@ -108,4 +111,4 @@ export function MemberCard({ member, variant = "grid" }: MemberCardProps) {
       </Card>
     </Link>
   );
-}
+});

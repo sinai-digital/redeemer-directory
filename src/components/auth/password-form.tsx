@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { updatePassword } from "@/lib/actions/auth";
 
-export function PasswordForm() {
+export function PasswordForm({ hasPassword = false }: { hasPassword?: boolean }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(
     null
@@ -20,7 +20,7 @@ export function PasswordForm() {
     if (result.error) {
       setMessage({ type: "error", text: result.error });
     } else {
-      setMessage({ type: "success", text: "Password set successfully!" });
+      setMessage({ type: "success", text: "Password updated successfully!" });
     }
   }
 
@@ -53,7 +53,7 @@ export function PasswordForm() {
         </p>
       )}
       <Button type="submit" loading={loading} size="sm">
-        Set Password
+        {hasPassword ? "Change Password" : "Set Password"}
       </Button>
     </form>
   );

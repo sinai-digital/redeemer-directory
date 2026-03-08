@@ -47,10 +47,11 @@ export function Sidebar({ profile, open, onClose }: SidebarProps) {
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-primary-900 text-white transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto no-print",
+          "fixed inset-y-0 left-0 z-50 w-64 bg-primary-900 text-white transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen lg:z-auto no-print",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
+        <div className="flex flex-col h-full">
         <div className="flex items-center justify-between h-16 px-4 border-b border-primary-800">
           <Link href="/directory" className="flex items-center gap-2" onClick={onClose}>
             <Image src="/logo.png" alt="Redeemer Church" width={40} height={36} className="shrink-0" />
@@ -68,7 +69,7 @@ export function Sidebar({ profile, open, onClose }: SidebarProps) {
           </button>
         </div>
 
-        <nav className="p-3 space-y-1">
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
             const isActive = pathname.startsWith(item.href);
             return (
@@ -125,7 +126,7 @@ export function Sidebar({ profile, open, onClose }: SidebarProps) {
           )}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 border-t border-primary-800">
+        <div className="border-t border-primary-800">
           <a
             href="https://redeemerriverview.org"
             target="_blank"
@@ -149,6 +150,7 @@ export function Sidebar({ profile, open, onClose }: SidebarProps) {
               </button>
             </form>
           </div>
+        </div>
         </div>
       </aside>
     </>

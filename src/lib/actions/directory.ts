@@ -2,12 +2,30 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { fetchAll } from "@/lib/supabase/fetch-all";
+import type { DirectoryMember } from "@/lib/types";
 
-export async function getDirectoryMembers() {
+export async function getDirectoryMembers(): Promise<DirectoryMember[]> {
   const supabase = await createClient();
-  return fetchAll(supabase, "directory_members_view", {
+  const members = await fetchAll(supabase, "directory_members_view", {
     modify: (q) => q.order("sort_name"),
   });
+
+  const profileIds = members.map((m) => m.profile_id).filter(Boolean) as string[];
+  if (profileIds.length > 0) {
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, avatar_url")
+      .in("id", profileIds)
+      .not("avatar_url", "is", null);
+    const avatarMap = new Map(
+      (profiles ?? []).map((p: { id: string; avatar_url: string }) => [p.id, p.avatar_url])
+    );
+    return members.map((m) => ({
+      ...m,
+      avatar_url: m.profile_id ? avatarMap.get(m.profile_id) ?? null : null,
+    })) as DirectoryMember[];
+  }
+  return members.map((m) => ({ ...m, avatar_url: null })) as DirectoryMember[];
 }
 
 export async function getFamilies() {

@@ -29,6 +29,7 @@ export default async function ProfilePage() {
   const member = data?.member;
   const family = member?.families;
 
+  const hasPassword = !!user.user_metadata?.has_password;
   const displayName = profile?.display_name || member?.first_name || "User";
   const nameParts = displayName.split(" ");
 
@@ -118,16 +119,16 @@ export default async function ProfilePage() {
           </Card>
         )}
 
-        {/* Set Password */}
+        {/* Password */}
         <Card>
           <CardHeader>
-            <h3 className="font-semibold font-heading">Set Password</h3>
+            <h3 className="font-semibold font-heading">{hasPassword ? "Change Password" : "Set Password"}</h3>
             <p className="text-sm text-neutral-700 mt-1">
-              Set a password to sign in without a magic link
+              {hasPassword ? "Update your password" : "Set a password to sign in without a magic link"}
             </p>
           </CardHeader>
           <CardContent>
-            <PasswordForm />
+            <PasswordForm hasPassword={hasPassword} />
           </CardContent>
         </Card>
       </div>

@@ -139,7 +139,10 @@ export async function updatePassword(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.updateUser({ password });
+  const { error } = await supabase.auth.updateUser({
+    password,
+    data: { has_password: true },
+  });
 
   if (error) {
     return { error: error.message };

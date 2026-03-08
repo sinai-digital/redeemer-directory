@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, Search, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import type { Profile } from "@/lib/types";
 
@@ -33,20 +33,8 @@ export function Header({ profile, onMenuToggle }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-4">
-        <button
-          className="p-2 rounded-md text-neutral-700 hover:bg-neutral-100 transition-colors"
-          aria-label="Search"
-        >
-          <Search className="h-5 w-5" />
-        </button>
-        <button
-          className="p-2 rounded-md text-neutral-700 hover:bg-neutral-100 transition-colors relative"
-          aria-label="Notifications"
-        >
-          <Bell className="h-5 w-5" />
-        </button>
         <a href="/profile" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <Avatar firstName={firstName} lastName={lastName} size="sm" />
+          <Avatar firstName={firstName} lastName={lastName} avatarUrl={profile?.avatar_url} size="sm" />
           <span className="hidden sm:block text-sm font-medium text-neutral-900 max-w-[120px] truncate">
             {firstName}
           </span>

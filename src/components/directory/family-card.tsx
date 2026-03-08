@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Link from "next/link";
 import { Phone, Mail, MapPin, Users } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -9,7 +10,7 @@ interface FamilyCardProps {
   variant?: "grid" | "list";
 }
 
-export function FamilyCard({ family, variant = "grid" }: FamilyCardProps) {
+export const FamilyCard = memo(function FamilyCard({ family, variant = "grid" }: FamilyCardProps) {
   if (variant === "list") {
     return (
       <Link href={`/directory/family/${family.id}`}>
@@ -83,4 +84,4 @@ export function FamilyCard({ family, variant = "grid" }: FamilyCardProps) {
       </Card>
     </Link>
   );
-}
+});

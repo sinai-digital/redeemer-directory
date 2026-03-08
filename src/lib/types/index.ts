@@ -74,6 +74,7 @@ export interface DirectoryMember extends Member {
   family_zip: string | null;
   family_phone: string | null;
   family_email: string | null;
+  avatar_url: string | null;
 }
 
 export interface CommunityGroup {
