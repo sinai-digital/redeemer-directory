@@ -30,6 +30,7 @@ async function requireAdmin() {
 }
 
 export async function getAdminStats() {
+  await requireAdmin();
   const adminClient = createAdminClient();
 
   const [families, members, posts, allowlist, lastSync] = await Promise.all([
