@@ -18,25 +18,8 @@ const sizeStyles: Record<AvatarSize, string> = {
   xl: "h-20 w-20 text-2xl",
 };
 
-const colors = [
-  "bg-primary-100 text-primary-800",
-  "bg-accent-300 text-neutral-950",
-  "bg-primary-200 text-primary-900",
-  "bg-neutral-200 text-neutral-900",
-];
-
-function hashName(name: string): number {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = ((hash << 5) - hash) + name.charCodeAt(i);
-    hash = hash & hash;
-  }
-  return Math.abs(hash);
-}
-
 export function Avatar({ firstName, lastName, avatarUrl, size = "md", className }: AvatarProps) {
   const initials = getInitials(firstName, lastName);
-  const colorIndex = hashName(firstName + lastName) % colors.length;
 
   if (avatarUrl) {
     return (
@@ -57,7 +40,7 @@ export function Avatar({ firstName, lastName, avatarUrl, size = "md", className 
       className={cn(
         "rounded-full flex items-center justify-center font-semibold shrink-0",
         sizeStyles[size],
-        colors[colorIndex],
+        "bg-primary-100 text-primary-800",
         className
       )}
       aria-label={`${firstName} ${lastName}`}

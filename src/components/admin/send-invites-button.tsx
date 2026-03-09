@@ -86,6 +86,8 @@ export function SendInvitesButton({ remaining }: SendInvitesButtonProps) {
     );
   }
 
+  const isAll = batchSize === remaining;
+
   if (showConfirm) {
     return (
       <div className="space-y-3">
@@ -98,6 +100,11 @@ export function SendInvitesButton({ remaining }: SendInvitesButtonProps) {
             <p className="mt-1">
               Each recipient will receive an email with a link to sign in to the directory.
             </p>
+            {isAll && (
+              <p className="mt-1 font-medium">
+                This will send invites to all {remaining} remaining people at once.
+              </p>
+            )}
           </div>
         </div>
         {error && (
@@ -125,6 +132,8 @@ export function SendInvitesButton({ remaining }: SendInvitesButtonProps) {
     );
   }
 
+  const presets = [5, 10, 25, 50, 100].filter((n) => n < remaining);
+
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-3">
@@ -136,11 +145,12 @@ export function SendInvitesButton({ remaining }: SendInvitesButtonProps) {
           onChange={(e) => setBatchSize(Number(e.target.value))}
           className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-300"
         >
-          {[5, 10, 25, 50, 100].filter((n) => n <= remaining || n === 5).map((n) => (
-            <option key={n} value={Math.min(n, remaining)}>
-              {Math.min(n, remaining)}
+          {presets.map((n) => (
+            <option key={n} value={n}>
+              {n}
             </option>
           ))}
+          <option value={remaining}>All ({remaining})</option>
         </select>
         <span className="text-sm text-neutral-500">
           of {remaining} remaining

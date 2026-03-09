@@ -273,7 +273,7 @@ export async function sendInviteEmails(batchSize: number) {
   await requireAdmin();
   const adminClient = createAdminClient();
 
-  const cap = Math.min(batchSize, 100);
+  const cap = batchSize;
 
   // Fetch unsent, unclaimed allowlist entries
   const { data: unsent, error: fetchErr } = await adminClient

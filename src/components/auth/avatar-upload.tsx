@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import imageCompression from "browser-image-compression";
 import { Avatar } from "@/components/ui/avatar";
 import { uploadAvatar } from "@/lib/actions/profile";
 import { Camera, Loader2 } from "lucide-react";
@@ -15,26 +16,46 @@ interface AvatarUploadProps {
 export function AvatarUpload({ firstName, lastName, avatarUrl }: AvatarUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
+  const [compressing, setCompressing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  const busy = isPending || compressing;
 
   function handleClick() {
     fileInputRef.current?.click();
   }
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setError(null);
 
-    if (file.size > 2 * 1024 * 1024) {
-      setError("File must be under 2MB");
+    let toUpload: File = file;
+
+    // Compress image client-side before upload
+    try {
+      setCompressing(true);
+      toUpload = await imageCompression(file, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 800,
+        useWebWorker: true,
+        fileType: "image/jpeg",
+      });
+    } catch {
+      // If compression fails, try uploading the original
+    } finally {
+      setCompressing(false);
+    }
+
+    if (toUpload.size > 5 * 1024 * 1024) {
+      setError("File is too large even after compression");
       return;
     }
 
     const formData = new FormData();
-    formData.append("avatar", file);
+    formData.append("avatar", toUpload);
 
     startTransition(async () => {
       const result = await uploadAvatar(formData);
@@ -55,7 +76,7 @@ export function AvatarUpload({ firstName, lastName, avatarUrl }: AvatarUploadPro
         type="button"
         onClick={handleClick}
         className="relative group cursor-pointer"
-        disabled={isPending}
+        disabled={busy}
       >
         <Avatar
           firstName={firstName}
@@ -64,13 +85,13 @@ export function AvatarUpload({ firstName, lastName, avatarUrl }: AvatarUploadPro
           size="xl"
         />
         <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-          {isPending ? (
+          {busy ? (
             <Loader2 className="h-6 w-6 text-white animate-spin" />
           ) : (
             <Camera className="h-6 w-6 text-white" />
           )}
         </div>
-        {isPending && (
+        {busy && (
           <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center">
             <Loader2 className="h-6 w-6 text-white animate-spin" />
           </div>

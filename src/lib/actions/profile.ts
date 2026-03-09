@@ -61,7 +61,7 @@ export async function uploadAvatar(formData: FormData) {
 
   const file = formData.get("avatar") as File;
   if (!file || file.size === 0) return { error: "No file provided" };
-  if (file.size > 2 * 1024 * 1024) return { error: "File must be under 2MB" };
+  if (file.size > 5 * 1024 * 1024) return { error: "File must be under 5MB" };
   if (!file.type.startsWith("image/")) return { error: "File must be an image" };
 
   const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
