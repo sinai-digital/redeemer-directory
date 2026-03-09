@@ -16,6 +16,7 @@ interface Comment {
     id: string;
     display_name: string | null;
     email: string;
+    avatar_url?: string | null;
   };
   replies?: Comment[];
 }
@@ -67,6 +68,7 @@ function CommentItem({
             <Avatar
               firstName={nameParts[0] || "U"}
               lastName={nameParts[1] || ""}
+              avatarUrl={author?.avatar_url}
               size="sm"
             />
             <div className="flex-1 min-w-0">

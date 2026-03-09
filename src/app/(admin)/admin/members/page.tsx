@@ -60,6 +60,7 @@ export default async function AdminMembersPage() {
                     <Avatar
                       firstName={nameParts[0]}
                       lastName={nameParts[1] || ""}
+                      avatarUrl={profile.avatar_url}
                       size="sm"
                     />
                     <div className="flex-1 min-w-0">

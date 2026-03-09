@@ -73,6 +73,7 @@ export default async function MinistryDetailPage({
                   <Avatar
                     firstName={contact.first_name}
                     lastName={contact.last_name}
+                    avatarUrl={contact.avatar_url}
                     size="md"
                   />
                   <div>
@@ -101,6 +102,7 @@ export default async function MinistryDetailPage({
                   <Avatar
                     firstName={member.first_name}
                     lastName={member.last_name}
+                    avatarUrl={member.avatar_url}
                     size="sm"
                   />
                   <span className="text-sm font-medium">

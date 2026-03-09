@@ -4,28 +4,33 @@ import { createClient } from "@/lib/supabase/server";
 import { fetchAll } from "@/lib/supabase/fetch-all";
 import type { DirectoryMember } from "@/lib/types";
 
+async function enrichMembersWithAvatars(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  members: any[]
+) {
+  const profileIds = members.map((m) => m.profile_id).filter(Boolean) as string[];
+  if (profileIds.length === 0) return members.map((m) => ({ ...m, avatar_url: null }));
+
+  const { data: profiles } = await supabase
+    .from("profiles")
+    .select("id, avatar_url")
+    .in("id", profileIds)
+    .not("avatar_url", "is", null);
+  const avatarMap = new Map(
+    (profiles ?? []).map((p: { id: string; avatar_url: string }) => [p.id, p.avatar_url])
+  );
+  return members.map((m) => ({
+    ...m,
+    avatar_url: m.profile_id ? avatarMap.get(m.profile_id) ?? null : null,
+  }));
+}
+
 export async function getDirectoryMembers(): Promise<DirectoryMember[]> {
   const supabase = await createClient();
   const members = await fetchAll(supabase, "directory_members_view", {
     modify: (q) => q.order("sort_name"),
   });
-
-  const profileIds = members.map((m) => m.profile_id).filter(Boolean) as string[];
-  if (profileIds.length > 0) {
-    const { data: profiles } = await supabase
-      .from("profiles")
-      .select("id, avatar_url")
-      .in("id", profileIds)
-      .not("avatar_url", "is", null);
-    const avatarMap = new Map(
-      (profiles ?? []).map((p: { id: string; avatar_url: string }) => [p.id, p.avatar_url])
-    );
-    return members.map((m) => ({
-      ...m,
-      avatar_url: m.profile_id ? avatarMap.get(m.profile_id) ?? null : null,
-    })) as DirectoryMember[];
-  }
-  return members.map((m) => ({ ...m, avatar_url: null })) as DirectoryMember[];
+  return enrichMembersWithAvatars(supabase, members) as Promise<DirectoryMember[]>;
 }
 
 export async function getFamilies() {
@@ -51,7 +56,7 @@ export async function getFamily(id: string) {
   if (familyResult.error) throw familyResult.error;
   return {
     family: familyResult.data,
-    members: membersResult.data || [],
+    members: await enrichMembersWithAvatars(supabase, membersResult.data || []),
   };
 }
 
@@ -66,6 +71,9 @@ export async function getMember(id: string) {
 
   if (error) throw error;
 
+  // Get avatar
+  const [enriched] = await enrichMembersWithAvatars(supabase, [member]);
+
   // Get community groups
   const { data: groups } = await supabase
     .from("community_group_members")
@@ -79,7 +87,7 @@ export async function getMember(id: string) {
     .eq("member_id", id);
 
   return {
-    member,
+    member: enriched,
     communityGroups: groups?.map((g) => g.community_groups).filter(Boolean) || [],
     ministries:
       ministries?.map((m) => ({ ...m.ministries, role: m.role })).filter(Boolean) || [],
@@ -127,7 +135,9 @@ export async function getCommunityGroup(id: string) {
       .select("*")
       .eq("id", group.leader_id)
       .single();
-    leader = data;
+    if (data) {
+      [leader] = await enrichMembersWithAvatars(supabase, [data]);
+    }
   }
 
   // Get all group members with member details
@@ -136,10 +146,12 @@ export async function getCommunityGroup(id: string) {
     .select("member_id, members(*)")
     .eq("group_id", id);
 
+  const rawMembers = groupMembers?.map((gm) => gm.members).filter(Boolean) || [];
+
   return {
     group,
     leader,
-    members: groupMembers?.map((gm) => gm.members).filter(Boolean) || [],
+    members: await enrichMembersWithAvatars(supabase, rawMembers),
   };
 }
 
@@ -162,7 +174,9 @@ export async function getMinistry(id: string) {
       .select("*")
       .eq("id", ministry.contact_id)
       .single();
-    contact = data;
+    if (data) {
+      [contact] = await enrichMembersWithAvatars(supabase, [data]);
+    }
   }
 
   // Get all ministry members with roles
@@ -171,9 +185,12 @@ export async function getMinistry(id: string) {
     .select("role, member_id, members(*)")
     .eq("ministry_id", id);
 
+  const rawMembers = ministryMembers?.map((mm) => ({ ...mm.members, role: mm.role })).filter(Boolean) || [];
+  const enrichedMembers = await enrichMembersWithAvatars(supabase, rawMembers);
+
   return {
     ministry,
     contact,
-    members: ministryMembers?.map((mm) => ({ ...mm.members, role: mm.role })).filter(Boolean) || [],
+    members: enrichedMembers,
   };
 }

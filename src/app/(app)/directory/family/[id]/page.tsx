@@ -100,6 +100,7 @@ export default async function FamilyDetailPage({
                     <Avatar
                       firstName={member.first_name}
                       lastName={member.last_name}
+                      avatarUrl={member.avatar_url}
                       size="lg"
                     />
                     <div className="flex-1 min-w-0">

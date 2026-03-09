@@ -39,11 +39,11 @@ export default async function MemberDetailPage({
   return (
     <div>
       <Link
-        href={family ? `/directory/family/${family.id}` : `/directory?tab=members`}
+        href="/directory?tab=members"
         className="inline-flex items-center gap-1 text-sm text-neutral-700 hover:text-neutral-900 mb-4 transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
-        {family ? `Back to ${family.display_name}` : "Back to directory"}
+        Back to directory
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -53,6 +53,7 @@ export default async function MemberDetailPage({
             <Avatar
               firstName={member.first_name}
               lastName={member.last_name}
+              avatarUrl={member.avatar_url}
               size="xl"
               className="mx-auto"
             />

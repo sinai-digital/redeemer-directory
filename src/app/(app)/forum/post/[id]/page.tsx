@@ -75,6 +75,7 @@ export default async function PostDetailPage({
             <Avatar
               firstName={nameParts[0] || "U"}
               lastName={nameParts[1] || ""}
+              avatarUrl={author?.avatar_url}
               size="lg"
             />
             <div className="flex-1 min-w-0">

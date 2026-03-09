@@ -89,6 +89,7 @@ export default async function GroupDetailPage({
                   <Avatar
                     firstName={leader.first_name}
                     lastName={leader.last_name}
+                    avatarUrl={leader.avatar_url}
                     size="md"
                   />
                   <div>
@@ -117,6 +118,7 @@ export default async function GroupDetailPage({
                   <Avatar
                     firstName={member.first_name}
                     lastName={member.last_name}
+                    avatarUrl={member.avatar_url}
                     size="sm"
                   />
                   <span className="text-sm font-medium">

@@ -62,6 +62,7 @@ export function PostCard({ post, compact }: PostCardProps) {
             <Avatar
               firstName={nameParts[0] || "U"}
               lastName={nameParts[1] || ""}
+              avatarUrl={author?.avatar_url}
               size="md"
             />
             <div className="min-w-0 flex-1">
