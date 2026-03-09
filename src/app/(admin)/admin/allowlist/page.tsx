@@ -3,7 +3,6 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { AllowlistTable } from "@/components/admin/allowlist-table";
 import { AddToAllowlistForm } from "@/components/admin/add-allowlist-form";
-import { SyncAllowlistButton } from "@/components/admin/sync-allowlist-button";
 import { SendInvitesButton } from "@/components/admin/send-invites-button";
 import { ArrowLeft, Mail, CheckCircle, Clock, Users } from "lucide-react";
 import Link from "next/link";
@@ -85,12 +84,14 @@ export default async function AllowlistPage() {
       <div className="space-y-6">
         <Card>
           <CardContent className="pt-5">
-            <h3 className="font-semibold font-heading mb-2">Sync Allowlist from Directory</h3>
-            <p className="text-sm text-neutral-700 mb-3">
-              Add all member emails to the allowlist (for magic link sign-in).
-              Emails already on the list will be skipped.
+            <h3 className="font-semibold font-heading mb-2">Bulk Send Email Invites</h3>
+            <p className="text-sm text-neutral-700 mb-4">
+              Send invite emails to allowlist members who haven&apos;t been invited yet.
+              Each email contains a link to the login page where they can sign in via
+              magic link. Our app&apos;s email service can send 100 total emails per day,
+              between invite emails and sign-in email links.
             </p>
-            <SyncAllowlistButton />
+            <SendInvitesButton remaining={stats.notInvited} />
           </CardContent>
         </Card>
 
@@ -98,18 +99,6 @@ export default async function AllowlistPage() {
           <CardContent className="pt-5">
             <h3 className="font-semibold font-heading mb-3">Add Email</h3>
             <AddToAllowlistForm />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-5">
-            <h3 className="font-semibold font-heading mb-2">Send Invite Emails</h3>
-            <p className="text-sm text-neutral-700 mb-4">
-              Send invite emails to allowlist members who haven&apos;t been invited yet.
-              Each email contains a link to the login page where they can sign in via
-              magic link. Resend&apos;s free tier allows 100 emails per day.
-            </p>
-            <SendInvitesButton remaining={stats.notInvited} />
           </CardContent>
         </Card>
 
