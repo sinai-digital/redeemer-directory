@@ -432,9 +432,13 @@ export async function executeSync(
   }
 
   // Batch insert new members
+  const insertedMemberEmails: string[] = [];
   for (const batch of chunk(newMemberRows, BATCH_SIZE)) {
     const { error } = await admin.from("members").insert(batch);
     if (error) throw new Error(`Failed to insert members: ${error.message}`);
+    for (const m of batch) {
+      if (m.email) insertedMemberEmails.push(m.email.toLowerCase());
+    }
   }
 
   // Batch update existing members (upsert on PK, preserves show_* and profile_id)
@@ -443,6 +447,24 @@ export async function executeSync(
       .from("members")
       .upsert(batch, { onConflict: "id" });
     if (error) throw new Error(`Failed to update members: ${error.message}`);
+  }
+
+  // Auto-link newly inserted members to existing profiles by email
+  if (insertedMemberEmails.length > 0) {
+    const { data: profiles } = await admin
+      .from("profiles")
+      .select("id, email")
+      .in("email", insertedMemberEmails);
+
+    if (profiles && profiles.length > 0) {
+      for (const profile of profiles) {
+        await admin
+          .from("members")
+          .update({ profile_id: profile.id })
+          .eq("email", profile.email)
+          .is("profile_id", null);
+      }
+    }
   }
 
   // 5. Batch delete stale members (only if no profile linked)
