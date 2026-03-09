@@ -40,8 +40,8 @@ export default async function AllowlistPage() {
       color: "text-amber-700 bg-amber-100",
     },
     {
-      label: "Claimed (Signed In)",
-      value: stats.claimed,
+      label: "Signed In",
+      value: stats.signedIn,
       icon: CheckCircle,
       color: "text-green-700 bg-green-100",
     },

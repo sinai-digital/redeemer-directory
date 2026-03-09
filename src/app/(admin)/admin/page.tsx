@@ -29,11 +29,11 @@ export default async function AdminPage() {
     // { label: "Forum Posts", value: stats.postCount, icon: MessageSquare, href: "/admin/forum", color: "text-emerald-700 bg-emerald-100" },  // Hidden for initial launch
     {
       label: "Allowlist",
-      value: `${stats.claimedCount}/${stats.allowlistCount}`,
+      value: `${stats.signedInCount}/${stats.allowlistCount}`,
       icon: Mail,
       href: "/admin/allowlist",
       color: "text-amber-700 bg-amber-100",
-      subtitle: "claimed",
+      subtitle: "signed in",
     },
     {
       label: "Invited",

@@ -9,7 +9,7 @@ import { Trash2, Send } from "lucide-react";
 
 interface AllowlistEntry {
   email: string;
-  claimed_at: string | null;
+  is_onboarded: boolean;
   invite_sent_at: string | null;
   created_at: string;
 }
@@ -76,8 +76,10 @@ export function AllowlistTable({ allowlist }: AllowlistTableProps) {
             >
               <td className="py-2 px-3 font-medium">{entry.email}</td>
               <td className="py-2 px-3">
-                {entry.claimed_at ? (
-                  <Badge variant="success">Claimed</Badge>
+                {entry.is_onboarded ? (
+                  <Badge variant="success">Signed In</Badge>
+                ) : entry.invite_sent_at ? (
+                  <Badge variant="info">Invited</Badge>
                 ) : (
                   <Badge variant="warning">Pending</Badge>
                 )}
@@ -98,8 +100,8 @@ export function AllowlistTable({ allowlist }: AllowlistTableProps) {
                   size="sm"
                   onClick={() => handleSendInvite(entry.email)}
                   loading={sendingEmail === entry.email}
-                  className={entry.claimed_at ? "text-neutral-400 hover:text-neutral-500 hover:bg-neutral-50" : "text-primary-700 hover:text-primary-800 hover:bg-primary-50"}
-                  title={entry.claimed_at ? "Resend invite" : "Send invite"}
+                  className={entry.is_onboarded ? "text-neutral-400 hover:text-neutral-500 hover:bg-neutral-50" : "text-primary-700 hover:text-primary-800 hover:bg-primary-50"}
+                  title={entry.is_onboarded ? "Resend invite" : "Send invite"}
                 >
                   <Send className="h-4 w-4" />
                 </Button>

@@ -37,7 +37,7 @@ export async function getAdminStats() {
     adminClient.from("families").select("id", { count: "exact", head: true }),
     adminClient.from("members").select("id", { count: "exact", head: true }),
     adminClient.from("forum_posts").select("id", { count: "exact", head: true }),
-    adminClient.from("auth_allowlist").select("email, claimed_at, invite_sent_at", { count: "exact" }),
+    adminClient.from("auth_allowlist").select("email, invite_sent_at", { count: "exact" }),
     adminClient
       .from("sync_history")
       .select("performed_at")
@@ -47,8 +47,10 @@ export async function getAdminStats() {
       .single(),
   ]);
 
-  const claimedCount =
-    allowlist.data?.filter((a) => a.claimed_at !== null).length || 0;
+  const emails = (allowlist.data || []).map((a: { email: string }) => a.email.toLowerCase());
+  const onboardedSet = await getOnboardedEmails(adminClient, emails);
+
+  const signedInCount = emails.filter((e) => onboardedSet.has(e)).length;
   const invitedCount =
     allowlist.data?.filter((a) => a.invite_sent_at !== null).length || 0;
 
@@ -57,10 +59,33 @@ export async function getAdminStats() {
     memberCount: members.count || 0,
     postCount: posts.count || 0,
     allowlistCount: allowlist.count || 0,
-    claimedCount,
+    signedInCount,
     invitedCount,
     lastSyncAt: lastSync.data?.performed_at ?? null,
   };
+}
+
+/** Batch-query profiles to find which emails have completed onboarding. */
+async function getOnboardedEmails(
+  adminClient: ReturnType<typeof createAdminClient>,
+  emails: string[]
+): Promise<Set<string>> {
+  if (emails.length === 0) return new Set();
+
+  // Query in chunks of 200 to stay within URL length limits
+  const onboarded = new Set<string>();
+  for (let i = 0; i < emails.length; i += 200) {
+    const chunk = emails.slice(i, i + 200);
+    const { data } = await adminClient
+      .from("profiles")
+      .select("email")
+      .in("email", chunk)
+      .eq("is_onboarded", true);
+    for (const p of data || []) {
+      onboarded.add(p.email.toLowerCase());
+    }
+  }
+  return onboarded;
 }
 
 export async function getAllowlist() {
@@ -73,7 +98,15 @@ export async function getAllowlist() {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return data || [];
+  const entries = data || [];
+
+  const emails = entries.map((e: { email: string }) => e.email.toLowerCase());
+  const onboardedSet = await getOnboardedEmails(adminClient, emails);
+
+  return entries.map((e: any) => ({
+    ...e,
+    is_onboarded: onboardedSet.has(e.email.toLowerCase()),
+  }));
 }
 
 export async function addToAllowlist(formData: FormData) {
@@ -256,16 +289,19 @@ export async function getInviteStats() {
 
   const { data, error } = await adminClient
     .from("auth_allowlist")
-    .select("email, claimed_at, invite_sent_at");
+    .select("email, invite_sent_at");
 
   if (error) throw error;
   const entries = data || [];
 
+  const emails = entries.map((e: { email: string }) => e.email.toLowerCase());
+  const onboardedSet = await getOnboardedEmails(adminClient, emails);
+
   return {
     total: entries.length,
     invited: entries.filter((e) => e.invite_sent_at).length,
-    notInvited: entries.filter((e) => !e.invite_sent_at && !e.claimed_at).length,
-    claimed: entries.filter((e) => e.claimed_at).length,
+    notInvited: entries.filter((e) => !e.invite_sent_at && !onboardedSet.has(e.email.toLowerCase())).length,
+    signedIn: onboardedSet.size,
   };
 }
 
@@ -292,15 +328,6 @@ export async function sendSingleInvite(email: string) {
   });
   if (createErr && !createErr.message.includes("already been registered")) {
     return { error: createErr.message };
-  }
-
-  // The handle_new_user trigger sets claimed_at on user creation, but the
-  // person hasn't actually signed in yet — clear it so status stays "Pending".
-  if (!createErr) {
-    await adminClient
-      .from("auth_allowlist")
-      .update({ claimed_at: null })
-      .eq("email", email);
   }
 
   const loginUrl = `${SITE_URL}/login`;
@@ -340,12 +367,11 @@ export async function sendInviteEmails(batchSize: number) {
 
   const cap = batchSize;
 
-  // Fetch unsent, unclaimed allowlist entries
+  // Fetch unsent allowlist entries
   const { data: unsent, error: fetchErr } = await adminClient
     .from("auth_allowlist")
     .select("email")
     .is("invite_sent_at", null)
-    .is("claimed_at", null)
     .order("created_at", { ascending: true })
     .limit(cap);
 
@@ -379,15 +405,6 @@ export async function sendInviteEmails(batchSize: number) {
     if (createErr && !createErr.message.includes("already been registered")) {
       errors.push(`${email}: ${createErr.message}`);
       continue;
-    }
-
-    // The handle_new_user trigger sets claimed_at on user creation, but the
-    // person hasn't actually signed in yet — clear it so status stays "Pending".
-    if (!createErr) {
-      await adminClient
-        .from("auth_allowlist")
-        .update({ claimed_at: null })
-        .eq("email", entry.email);
     }
 
     try {

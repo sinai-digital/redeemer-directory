@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils/cn";
 import { type HTMLAttributes } from "react";
 
-type BadgeVariant = "default" | "primary" | "accent" | "success" | "warning" | "muted";
+type BadgeVariant = "default" | "primary" | "accent" | "success" | "warning" | "info" | "muted";
 
 interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
@@ -13,6 +13,7 @@ const variantStyles: Record<BadgeVariant, string> = {
   accent: "bg-accent-300 text-neutral-950",
   success: "bg-green-100 text-green-800",
   warning: "bg-amber-100 text-amber-800",
+  info: "bg-blue-100 text-blue-800",
   muted: "bg-neutral-100 text-neutral-700",
 };
 
