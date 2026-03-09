@@ -294,6 +294,15 @@ export async function sendSingleInvite(email: string) {
     return { error: createErr.message };
   }
 
+  // The handle_new_user trigger sets claimed_at on user creation, but the
+  // person hasn't actually signed in yet — clear it so status stays "Pending".
+  if (!createErr) {
+    await adminClient
+      .from("auth_allowlist")
+      .update({ claimed_at: null })
+      .eq("email", email);
+  }
+
   const loginUrl = `${SITE_URL}/login`;
 
   try {
@@ -370,6 +379,15 @@ export async function sendInviteEmails(batchSize: number) {
     if (createErr && !createErr.message.includes("already been registered")) {
       errors.push(`${email}: ${createErr.message}`);
       continue;
+    }
+
+    // The handle_new_user trigger sets claimed_at on user creation, but the
+    // person hasn't actually signed in yet — clear it so status stays "Pending".
+    if (!createErr) {
+      await adminClient
+        .from("auth_allowlist")
+        .update({ claimed_at: null })
+        .eq("email", entry.email);
     }
 
     try {
