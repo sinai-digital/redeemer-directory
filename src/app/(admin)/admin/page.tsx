@@ -39,7 +39,7 @@ export default async function AdminPage() {
       label: "Invited",
       value: `${stats.invitedCount}/${stats.allowlistCount}`,
       icon: Send,
-      href: "/admin/invites",
+      href: "/admin/allowlist",
       color: "text-emerald-700 bg-emerald-100",
       subtitle: "sent",
     },
@@ -81,7 +81,7 @@ export default async function AdminPage() {
         ))}
       </div>
 
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <Link href="/admin/sync">
           <Card hover>
             <CardContent className="pt-5 text-center">
@@ -104,18 +104,7 @@ export default async function AdminPage() {
               <Mail className="h-8 w-8 mx-auto text-primary-800 mb-2" />
               <h3 className="font-semibold font-heading">Manage Allowlist</h3>
               <p className="text-sm text-neutral-700 mt-1">
-                Invite new members by email
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link href="/admin/invites">
-          <Card hover>
-            <CardContent className="pt-5 text-center">
-              <Send className="h-8 w-8 mx-auto text-primary-800 mb-2" />
-              <h3 className="font-semibold font-heading">Send Invites</h3>
-              <p className="text-sm text-neutral-700 mt-1">
-                Email invite links to members
+                Manage allowlist & send invites
               </p>
             </CardContent>
           </Card>

@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { removeFromAllowlist } from "@/lib/actions/admin";
+import { removeFromAllowlist, sendSingleInvite } from "@/lib/actions/admin";
 import { formatFullDate } from "@/lib/utils/format";
-import { Trash2 } from "lucide-react";
+import { Trash2, Send } from "lucide-react";
 
 interface AllowlistEntry {
   email: string;
@@ -20,12 +20,22 @@ interface AllowlistTableProps {
 
 export function AllowlistTable({ allowlist }: AllowlistTableProps) {
   const [removingEmail, setRemovingEmail] = useState<string | null>(null);
+  const [sendingEmail, setSendingEmail] = useState<string | null>(null);
 
   async function handleRemove(email: string) {
     if (!confirm(`Remove ${email} from the allowlist?`)) return;
     setRemovingEmail(email);
     await removeFromAllowlist(email);
     setRemovingEmail(null);
+  }
+
+  async function handleSendInvite(email: string) {
+    setSendingEmail(email);
+    const result = await sendSingleInvite(email);
+    setSendingEmail(null);
+    if (result.error) {
+      alert(`Failed to send invite: ${result.error}`);
+    }
   }
 
   if (allowlist.length === 0) {
@@ -83,6 +93,16 @@ export function AllowlistTable({ allowlist }: AllowlistTableProps) {
                 {formatFullDate(entry.created_at)}
               </td>
               <td className="py-2 px-3 text-right">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleSendInvite(entry.email)}
+                  loading={sendingEmail === entry.email}
+                  className={entry.claimed_at ? "text-neutral-400 hover:text-neutral-500 hover:bg-neutral-50" : "text-primary-700 hover:text-primary-800 hover:bg-primary-50"}
+                  title={entry.claimed_at ? "Resend invite" : "Send invite"}
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
                 <Button
                   variant="ghost"
                   size="sm"

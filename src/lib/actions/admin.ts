@@ -269,6 +269,62 @@ export async function getInviteStats() {
   };
 }
 
+export async function sendSingleInvite(email: string) {
+  await requireAdmin();
+  const adminClient = createAdminClient();
+
+  const normalizedEmail = email.toLowerCase();
+
+  // Look up first name from members table
+  const { data: memberData } = await adminClient
+    .from("members")
+    .select("first_name")
+    .ilike("email", normalizedEmail)
+    .limit(1)
+    .single();
+
+  const firstName = memberData?.first_name || "Friend";
+
+  // Create passwordless account (skip if already exists)
+  const { error: createErr } = await adminClient.auth.admin.createUser({
+    email: normalizedEmail,
+    email_confirm: true,
+  });
+  if (createErr && !createErr.message.includes("already been registered")) {
+    return { error: createErr.message };
+  }
+
+  const loginUrl = `${SITE_URL}/login`;
+
+  try {
+    const { error: sendErr } = await getResend().emails.send({
+      from: FROM_EMAIL,
+      to: normalizedEmail,
+      subject: "You're invited to the Redeemer Church Directory",
+      react: InviteEmail({ firstName, email: normalizedEmail, loginUrl }),
+    });
+
+    if (sendErr) {
+      return { error: sendErr.message };
+    }
+
+    // Mark as sent
+    const { error: updateErr } = await adminClient
+      .from("auth_allowlist")
+      .update({ invite_sent_at: new Date().toISOString() })
+      .eq("email", email);
+
+    if (updateErr) {
+      return { error: `Sent but failed to mark as sent: ${updateErr.message}` };
+    }
+
+    revalidatePath("/admin/allowlist");
+    return { success: true };
+  } catch (e: any) {
+    return { error: e.message };
+  }
+}
+
 export async function sendInviteEmails(batchSize: number) {
   await requireAdmin();
   const adminClient = createAdminClient();
@@ -345,7 +401,6 @@ export async function sendInviteEmails(batchSize: number) {
     }
   }
 
-  revalidatePath("/admin/invites");
   revalidatePath("/admin/allowlist");
 
   return { sent, errors };
