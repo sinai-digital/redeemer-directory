@@ -148,6 +148,7 @@ export async function verifyOtpCode(email: string, token: string) {
   });
 
   if (error) {
+    console.error("verifyOtp error:", error.message, error);
     return { error: "Invalid or expired code. Please request a new one." };
   }
 
