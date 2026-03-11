@@ -147,7 +147,7 @@ export async function verifyOtpCode(email: string, token: string) {
   const { data, error } = await supabase.auth.verifyOtp({
     email: email.toLowerCase(),
     token,
-    type: "email",
+    type: "magiclink",
   });
 
   if (error) {
