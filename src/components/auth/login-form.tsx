@@ -168,7 +168,6 @@ export function LoginForm({ inviteMode, defaultEmail }: LoginFormProps) {
           name="password"
           type="password"
           label="Password"
-          placeholder="Enter your password"
           required
           autoComplete="current-password"
         />
