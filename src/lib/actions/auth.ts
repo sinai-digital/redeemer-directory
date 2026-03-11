@@ -50,13 +50,25 @@ export async function loginWithPassword(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: email.toLowerCase(),
     password,
   });
 
   if (error) {
     return { error: "Invalid email or password" };
+  }
+
+  if (data.user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_onboarded")
+      .eq("id", data.user.id)
+      .single();
+
+    if (!profile?.is_onboarded) {
+      redirect("/onboarding");
+    }
   }
 
   redirect("/directory");

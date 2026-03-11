@@ -20,10 +20,9 @@ interface MemberData {
 interface OnboardingFormProps {
   suggestedName: string;
   member: MemberData | null;
-  mode?: "onboarding" | "set-password";
 }
 
-export function OnboardingForm({ suggestedName, member, mode = "onboarding" }: OnboardingFormProps) {
+export function OnboardingForm({ suggestedName, member }: OnboardingFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState(1);
@@ -39,7 +38,7 @@ export function OnboardingForm({ suggestedName, member, mode = "onboarding" }: O
   const [showBirthday, setShowBirthday] = useState(member?.show_birthday ?? true);
   const [showAddress, setShowAddress] = useState(member?.show_address ?? true);
 
-  const hasPrivacyStep = mode === "onboarding" && member && (member.email || member.phone || member.birthday || member.address);
+  const hasPrivacyStep = member && (member.email || member.phone || member.birthday || member.address);
   const totalSteps = hasPrivacyStep ? 2 : 1;
 
   function handleNext() {
@@ -174,7 +173,7 @@ export function OnboardingForm({ suggestedName, member, mode = "onboarding" }: O
             className="w-full"
             onClick={handleNext}
           >
-            {hasPrivacyStep ? "Next" : mode === "set-password" ? "Set Password" : "Complete Setup"}
+            {hasPrivacyStep ? "Next" : "Complete Setup"}
           </Button>
         </div>
       )}

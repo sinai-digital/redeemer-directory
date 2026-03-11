@@ -3,25 +3,41 @@
 import { useState, useMemo } from "react";
 import { Search, ChevronUp, ChevronDown, ChevronsUpDown, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { RoleManager } from "@/components/admin/role-manager";
+import type { UserRole } from "@/lib/types";
 
-interface MemberRow {
+export interface MemberRow {
   id: string;
   first_name: string;
   last_name: string;
   email: string | null;
   family_role: string | null;
   member_status: string | null;
+  profile_id: string | null;
   families: { family_name: string } | null;
+  profiles: { id: string; role: string; is_onboarded: boolean } | null;
 }
 
-type SortColumn = "first_name" | "last_name" | "email" | "family" | "family_role" | "member_status";
+type SortColumn = "first_name" | "last_name" | "email" | "family" | "family_role" | "member_status" | "user_role";
 type SortDir = "asc" | "desc";
 
 interface AdminPeopleTableProps {
   members: MemberRow[];
+  currentUserId: string | null;
 }
 
-export function AdminPeopleTable({ members }: AdminPeopleTableProps) {
+function userRoleRank(role: string | undefined): number {
+  switch (role) {
+    case "super_admin": return 5;
+    case "admin": return 4;
+    case "elder": return 3;
+    case "deacon": return 2;
+    case "member": return 1;
+    default: return -1;
+  }
+}
+
+export function AdminPeopleTable({ members, currentUserId }: AdminPeopleTableProps) {
   const [search, setSearch] = useState("");
   const [sortCol, setSortCol] = useState<SortColumn>("last_name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
@@ -42,13 +58,15 @@ export function AdminPeopleTable({ members }: AdminPeopleTableProps) {
       const first = (m.first_name ?? "").toLowerCase();
       const last = (m.last_name ?? "").toLowerCase();
       const email = (m.email ?? "").toLowerCase();
-      const family = ((m.families as any)?.family_name ?? "").toLowerCase();
+      const family = (m.families?.family_name ?? "").toLowerCase();
+      const role = (m.profiles?.role ?? "").toLowerCase();
       return (
         first.includes(q) ||
         last.includes(q) ||
         `${first} ${last}`.includes(q) ||
         email.includes(q) ||
-        family.includes(q)
+        family.includes(q) ||
+        role.includes(q)
       );
     });
   }, [members, search]);
@@ -56,6 +74,14 @@ export function AdminPeopleTable({ members }: AdminPeopleTableProps) {
   const sorted = useMemo(() => {
     const mult = sortDir === "asc" ? 1 : -1;
     return [...filtered].sort((a, b) => {
+      if (sortCol === "user_role") {
+        const aRank = userRoleRank(a.profiles?.role);
+        const bRank = userRoleRank(b.profiles?.role);
+        if (aRank < bRank) return -1 * mult;
+        if (aRank > bRank) return 1 * mult;
+        return 0;
+      }
+
       let aVal: string;
       let bVal: string;
       switch (sortCol) {
@@ -98,8 +124,9 @@ export function AdminPeopleTable({ members }: AdminPeopleTableProps) {
     { key: "last_name", label: "Last Name" },
     { key: "email", label: "Email" },
     { key: "family", label: "Family" },
-    { key: "family_role", label: "Role" },
+    { key: "family_role", label: "Family Role" },
     { key: "member_status", label: "Status" },
+    { key: "user_role", label: "User Role" },
   ];
 
   return (
@@ -160,7 +187,7 @@ export function AdminPeopleTable({ members }: AdminPeopleTableProps) {
           {sorted.length === 0 ? (
             <tbody>
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-sm text-neutral-500">
+                <td colSpan={7} className="px-4 py-8 text-center text-sm text-neutral-500">
                   No people found matching your search.
                 </td>
               </tr>
@@ -182,7 +209,7 @@ export function AdminPeopleTable({ members }: AdminPeopleTableProps) {
                   {member.email || <span className="text-neutral-400">--</span>}
                 </td>
                 <td className="py-2 px-3 text-neutral-700">
-                  {(member.families as any)?.family_name ?? <span className="text-neutral-400">--</span>}
+                  {member.families?.family_name ?? <span className="text-neutral-400">--</span>}
                 </td>
                 <td className="py-2 px-3">
                   {member.family_role ? (
@@ -202,6 +229,22 @@ export function AdminPeopleTable({ members }: AdminPeopleTableProps) {
                     >
                       {member.member_status.replace("_", " ")}
                     </Badge>
+                  ) : (
+                    <span className="text-neutral-400">--</span>
+                  )}
+                </td>
+                <td className="py-2 px-3">
+                  {member.profiles ? (
+                    <span className="inline-flex items-center gap-1.5">
+                      <RoleManager
+                        profileId={member.profiles.id}
+                        currentRole={member.profiles.role as UserRole}
+                        isSelf={member.profiles.id === currentUserId}
+                      />
+                      {!member.profiles.is_onboarded && (
+                        <span className="h-2 w-2 rounded-full bg-amber-400" title="Not yet onboarded" />
+                      )}
+                    </span>
                   ) : (
                     <span className="text-neutral-400">--</span>
                   )}

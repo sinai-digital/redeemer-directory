@@ -8,9 +8,9 @@ export const metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ mode?: string; email?: string }>;
+  searchParams: Promise<{ invite?: string; email?: string }>;
 }) {
-  const { mode, email } = await searchParams;
+  const { invite, email } = await searchParams;
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left brand panel */}
@@ -64,7 +64,7 @@ export default async function LoginPage({
           </h2>
 
           <LoginForm
-            defaultMode={mode === "magic" || mode === "password" ? mode : undefined}
+            inviteMode={invite === "1"}
             defaultEmail={email}
           />
 

@@ -145,6 +145,49 @@ export async function removeFromAllowlist(email: string) {
   return { success: true };
 }
 
+const DEFAULT_PASSWORD = "redeemer";
+
+export async function setDefaultPassword(email: string) {
+  await requireAdmin();
+  const adminClient = createAdminClient();
+
+  const normalizedEmail = email.toLowerCase();
+
+  // Try to create user with default password
+  const { error: createErr } = await adminClient.auth.admin.createUser({
+    email: normalizedEmail,
+    email_confirm: true,
+    password: DEFAULT_PASSWORD,
+  });
+
+  if (createErr) {
+    if (createErr.message.includes("already been registered")) {
+      // User already exists — look up profile by email and reset password
+      const { data: profile } = await adminClient
+        .from("profiles")
+        .select("id")
+        .eq("email", normalizedEmail)
+        .single();
+
+      if (!profile) {
+        return { error: "Could not find user profile for this email" };
+      }
+
+      const { error: updateErr } = await adminClient.auth.admin.updateUserById(
+        profile.id,
+        { password: DEFAULT_PASSWORD }
+      );
+
+      if (updateErr) return { error: updateErr.message };
+    } else {
+      return { error: createErr.message };
+    }
+  }
+
+  revalidatePath("/admin/allowlist");
+  return { success: true };
+}
+
 export async function updateMemberRole(profileId: string, role: UserRole) {
   const user = await requireAdmin();
   const adminClient = createAdminClient();

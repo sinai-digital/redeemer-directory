@@ -26,8 +26,8 @@ export async function GET(request: Request) {
           return NextResponse.redirect(`${origin}/onboarding`);
         }
 
-        // Already onboarded — came via magic link, so prompt to set a password
-        return NextResponse.redirect(`${origin}/onboarding?set-password=1`);
+        // Already onboarded — came via "forgot password" magic link
+        return NextResponse.redirect(`${origin}/reset-password`);
       }
 
       return NextResponse.redirect(`${origin}${next}`);

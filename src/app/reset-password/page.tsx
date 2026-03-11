@@ -2,13 +2,13 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { OnboardingForm } from "@/components/auth/onboarding-form";
+import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 
 export const metadata = {
-  title: "Welcome | Redeemer Church Directory",
+  title: "Reset Password | Redeemer Church Directory",
 };
 
-export default async function OnboardingPage() {
+export default async function ResetPasswordPage() {
   const supabase = await createClient();
   const {
     data: { user },
@@ -18,23 +18,12 @@ export default async function OnboardingPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("is_onboarded, display_name")
+    .select("is_onboarded")
     .eq("id", user.id)
     .single();
 
-  // Already onboarded — send to directory
-  if (profile?.is_onboarded) redirect("/directory");
-
-  // Try to suggest a name from the linked member record
-  const { data: member } = await supabase
-    .from("members")
-    .select("id, first_name, last_name, show_email, show_phone, show_birthday, show_address, email, phone, birthday, address")
-    .eq("profile_id", user.id)
-    .single();
-
-  const suggestedName = member
-    ? `${member.first_name} ${member.last_name}`.trim()
-    : profile?.display_name || "";
+  // Safety guard: un-onboarded users should go through full onboarding
+  if (!profile?.is_onboarded) redirect("/onboarding");
 
   return (
     <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
@@ -48,19 +37,16 @@ export default async function OnboardingPage() {
             className="mx-auto mb-4"
           />
           <h1 className="text-2xl font-bold font-heading text-primary-900">
-            Welcome to the Directory
+            Reset Your Password
           </h1>
           <p className="text-neutral-700 mt-2">
-            Set up your account to get started.
+            Choose a new password for your account.
           </p>
         </div>
 
         <Card>
           <CardContent className="pt-6">
-            <OnboardingForm
-              suggestedName={suggestedName}
-              member={member}
-            />
+            <ResetPasswordForm />
           </CardContent>
         </Card>
 

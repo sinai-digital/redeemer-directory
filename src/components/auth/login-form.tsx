@@ -7,17 +7,16 @@ import { loginWithMagicLink, loginWithPassword } from "@/lib/actions/auth";
 import { Mail, Lock, KeyRound } from "lucide-react";
 
 interface LoginFormProps {
-  defaultMode?: "magic" | "password";
+  inviteMode?: boolean;
   defaultEmail?: string;
 }
 
-export function LoginForm({ defaultMode, defaultEmail }: LoginFormProps) {
-  const [mode, setMode] = useState<"magic" | "password">(defaultMode || "password");
+export function LoginForm({ inviteMode, defaultEmail }: LoginFormProps) {
+  const [showForgot, setShowForgot] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [sentEmail, setSentEmail] = useState("");
-  const [forgotPassword, setForgotPassword] = useState(false);
 
   async function handleMagicLink(formData: FormData) {
     setLoading(true);
@@ -75,21 +74,15 @@ export function LoginForm({ defaultMode, defaultEmail }: LoginFormProps) {
     );
   }
 
-  return (
-    <div className="space-y-5">
-      {error && (
-        <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-md border border-red-200">
-          {error}
-        </div>
-      )}
-
-      {forgotPassword && mode === "magic" && (
-        <div className="bg-primary-50 border border-primary-200 rounded-md px-4 py-3 text-sm text-primary-800">
-          Enter your email to receive a sign-in link. You can change your password once logged in.
-        </div>
-      )}
-
-      {mode === "magic" ? (
+  // Invite mode: just a magic link form with email pre-filled
+  if (inviteMode) {
+    return (
+      <div className="space-y-5">
+        {error && (
+          <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-md border border-red-200">
+            {error}
+          </div>
+        )}
         <form action={handleMagicLink} className="space-y-4">
           <Input
             id="email"
@@ -103,11 +96,26 @@ export function LoginForm({ defaultMode, defaultEmail }: LoginFormProps) {
           />
           <Button type="submit" variant="gold" loading={loading} className="w-full">
             <Mail className="h-4 w-4" />
-            Email me a sign-in link
+            Send me a sign-in link
           </Button>
         </form>
-      ) : (
-        <form action={handlePassword} className="space-y-4">
+      </div>
+    );
+  }
+
+  // Forgot password view: magic link form with info banner
+  if (showForgot) {
+    return (
+      <div className="space-y-5">
+        {error && (
+          <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-md border border-red-200">
+            {error}
+          </div>
+        )}
+        <div className="bg-primary-50 border border-primary-200 rounded-md px-4 py-3 text-sm text-primary-800">
+          Enter your email to receive a sign-in link. You&apos;ll be prompted to set a new password.
+        </div>
+        <form action={handleMagicLink} className="space-y-4">
           <Input
             id="email"
             name="email"
@@ -118,63 +126,68 @@ export function LoginForm({ defaultMode, defaultEmail }: LoginFormProps) {
             autoComplete="email"
             autoFocus
           />
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            label="Password"
-            placeholder="Enter your password"
-            required
-            autoComplete="current-password"
-          />
           <Button type="submit" variant="gold" loading={loading} className="w-full">
-            <Lock className="h-4 w-4" />
-            Sign in
+            <Mail className="h-4 w-4" />
+            Send me a sign-in link
           </Button>
-          <button
-            type="button"
-            onClick={() => {
-              setForgotPassword(true);
-              setMode("magic");
-              setError(null);
-            }}
-            className="block w-full text-center text-xs text-neutral-500 hover:text-primary-800 mt-2 transition-colors"
-          >
-            <KeyRound className="h-3 w-3 inline mr-1" />
-            Forgot your password?
-          </button>
         </form>
-      )}
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-neutral-200" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white px-2 text-neutral-700">or</span>
-        </div>
+        <button
+          onClick={() => {
+            setShowForgot(false);
+            setError(null);
+          }}
+          className="w-full text-center text-sm text-neutral-700 hover:text-primary-800 transition-colors"
+        >
+          Back to sign in
+        </button>
       </div>
+    );
+  }
 
-      <button
-        onClick={() => {
-          setMode(mode === "magic" ? "password" : "magic");
-          setError(null);
-          setForgotPassword(false);
-        }}
-        className="w-full flex items-center justify-center gap-2 text-sm text-neutral-700 hover:text-primary-800 transition-colors"
-      >
-        {mode === "magic" ? (
-          <>
-            <Lock className="h-3.5 w-3.5" />
-            Sign in with password instead
-          </>
-        ) : (
-          <>
-            <Mail className="h-3.5 w-3.5" />
-            Email me a sign-in link instead
-          </>
-        )}
-      </button>
+  // Default: password login
+  return (
+    <div className="space-y-5">
+      {error && (
+        <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-md border border-red-200">
+          {error}
+        </div>
+      )}
+      <form action={handlePassword} className="space-y-4">
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          label="Email address"
+          defaultValue={defaultEmail}
+          required
+          autoComplete="email"
+          autoFocus
+        />
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          label="Password"
+          placeholder="Enter your password"
+          required
+          autoComplete="current-password"
+        />
+        <Button type="submit" variant="gold" loading={loading} className="w-full">
+          <Lock className="h-4 w-4" />
+          Sign in
+        </Button>
+        <button
+          type="button"
+          onClick={() => {
+            setShowForgot(true);
+            setError(null);
+          }}
+          className="block w-full text-center text-xs text-neutral-500 hover:text-primary-800 mt-2 transition-colors"
+        >
+          <KeyRound className="h-3 w-3 inline mr-1" />
+          Forgot your password?
+        </button>
+      </form>
     </div>
   );
 }

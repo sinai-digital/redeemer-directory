@@ -3,9 +3,9 @@
 import { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { removeFromAllowlist, sendSingleInvite } from "@/lib/actions/admin";
+import { removeFromAllowlist, sendSingleInvite, setDefaultPassword } from "@/lib/actions/admin";
 import { formatFullDate } from "@/lib/utils/format";
-import { Trash2, Send, ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { Trash2, Send, KeyRound, ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
 
 interface AllowlistEntry {
   email: string;
@@ -30,6 +30,7 @@ function statusRank(entry: AllowlistEntry): number {
 export function AllowlistTable({ allowlist }: AllowlistTableProps) {
   const [removingEmail, setRemovingEmail] = useState<string | null>(null);
   const [sendingEmail, setSendingEmail] = useState<string | null>(null);
+  const [settingPasswordEmail, setSettingPasswordEmail] = useState<string | null>(null);
   const [sortCol, setSortCol] = useState<SortColumn>("created_at");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
 
@@ -95,6 +96,18 @@ export function AllowlistTable({ allowlist }: AllowlistTableProps) {
     setSendingEmail(null);
     if (result.error) {
       alert(`Failed to send invite: ${result.error}`);
+    }
+  }
+
+  async function handleSetPassword(email: string) {
+    if (!confirm(`Set default password ('redeemer') for ${email}? They can log in with this and will be prompted to set their own password during onboarding.`)) return;
+    setSettingPasswordEmail(email);
+    const result = await setDefaultPassword(email);
+    setSettingPasswordEmail(null);
+    if (result.error) {
+      alert(`Failed to set password: ${result.error}`);
+    } else {
+      alert(`Default password set for ${email}. They can now sign in with password 'redeemer'.`);
     }
   }
 
@@ -169,7 +182,7 @@ export function AllowlistTable({ allowlist }: AllowlistTableProps) {
               <td className="py-2 px-3 text-neutral-700">
                 {formatFullDate(entry.created_at)}
               </td>
-              <td className="py-2 px-3 text-right">
+              <td className="py-2 px-3 text-right whitespace-nowrap">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -179,6 +192,17 @@ export function AllowlistTable({ allowlist }: AllowlistTableProps) {
                   title={entry.is_onboarded ? "Resend invite" : "Send invite"}
                 >
                   <Send className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleSetPassword(entry.email)}
+                  loading={settingPasswordEmail === entry.email}
+                  disabled={entry.is_onboarded}
+                  className={entry.is_onboarded ? "text-neutral-300 cursor-not-allowed" : "text-amber-600 hover:text-amber-700 hover:bg-amber-50"}
+                  title={entry.is_onboarded ? "Already onboarded" : "Set default password"}
+                >
+                  <KeyRound className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="ghost"
