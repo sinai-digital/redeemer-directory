@@ -29,9 +29,6 @@ export async function loginWithMagicLink(formData: FormData) {
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({
     email: email.toLowerCase(),
-    options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SUPABASE_URL ? "" : ""}${typeof window !== "undefined" ? window.location.origin : process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/auth/callback`,
-    },
   });
 
   if (error) {
@@ -147,7 +144,7 @@ export async function verifyOtpCode(email: string, token: string) {
   const { data, error } = await supabase.auth.verifyOtp({
     email: email.toLowerCase(),
     token,
-    type: "magiclink",
+    type: "email",
   });
 
   if (error) {
