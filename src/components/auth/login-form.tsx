@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { loginWithMagicLink, loginWithPassword } from "@/lib/actions/auth";
-import { Mail, Lock, KeyRound } from "lucide-react";
+import { loginWithMagicLink, loginWithPassword, verifyOtpCode } from "@/lib/actions/auth";
+import { Mail, Lock, KeyRound, ShieldCheck } from "lucide-react";
 
 interface LoginFormProps {
   inviteMode?: boolean;
@@ -17,6 +17,7 @@ export function LoginForm({ inviteMode, defaultEmail }: LoginFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [sentEmail, setSentEmail] = useState("");
+  const [resent, setResent] = useState(false);
 
   async function handleMagicLink(formData: FormData) {
     setLoading(true);
@@ -45,31 +46,86 @@ export function LoginForm({ inviteMode, defaultEmail }: LoginFormProps) {
 
   if (magicLinkSent) {
     return (
-      <div className="text-center space-y-4">
-        <div className="mx-auto w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
-          <Mail className="h-8 w-8 text-primary-800" />
-        </div>
-        <h2 className="text-xl font-semibold font-heading">Check your email</h2>
-        <p className="text-neutral-700">
-          We sent a sign-in link to <strong>{sentEmail}</strong>.
-        </p>
-        <div className="bg-neutral-50 border border-neutral-200 rounded-md px-4 py-3 text-sm text-neutral-600 text-left space-y-1.5">
-          <p>
-            Look for an email from <strong>Redeemer Church Directory</strong> with a sign-in link.
+      <div className="space-y-5">
+        {error && (
+          <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-md border border-red-200">
+            {error}
+          </div>
+        )}
+        <div className="text-center space-y-2">
+          <div className="mx-auto w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
+            <Mail className="h-8 w-8 text-primary-800" />
+          </div>
+          <h2 className="text-xl font-semibold font-heading">Enter your verification code</h2>
+          <p className="text-sm text-neutral-700">
+            We sent a 6-digit code to <strong>{sentEmail}</strong>.
           </p>
-          <p>
-            Check your spam or junk folder if you don&apos;t see it within 1–2 minutes.
-          </p>
         </div>
-        <button
-          onClick={() => {
-            setMagicLinkSent(false);
+        <form
+          action={async (formData: FormData) => {
+            setLoading(true);
             setError(null);
+            const token = formData.get("otp") as string;
+            const result = await verifyOtpCode(sentEmail, token);
+            setLoading(false);
+            if (result?.error) {
+              setError(result.error);
+            }
           }}
-          className="text-sm text-primary-800 hover:underline"
+          className="space-y-4"
         >
-          Use a different email
-        </button>
+          <Input
+            id="otp"
+            name="otp"
+            type="text"
+            inputMode="numeric"
+            maxLength={6}
+            label="6-digit code"
+            required
+            autoFocus
+            autoComplete="one-time-code"
+            className="text-center text-2xl tracking-[0.3em] font-mono"
+          />
+          <Button type="submit" variant="gold" loading={loading} className="w-full">
+            <ShieldCheck className="h-4 w-4" />
+            Verify code
+          </Button>
+        </form>
+        <div className="space-y-2 text-center">
+          <div className="bg-neutral-50 border border-neutral-200 rounded-md px-4 py-3 text-xs text-neutral-500 text-left">
+            Check your spam or junk folder if you don&apos;t see the email within a minute or two.
+          </div>
+          <button
+            onClick={async () => {
+              setLoading(true);
+              setError(null);
+              setResent(false);
+              const fd = new FormData();
+              fd.set("email", sentEmail);
+              const result = await loginWithMagicLink(fd);
+              setLoading(false);
+              if (result.error) {
+                setError(result.error);
+              } else {
+                setResent(true);
+              }
+            }}
+            disabled={loading}
+            className="text-sm text-primary-800 hover:underline disabled:opacity-50"
+          >
+            {resent ? "Code resent!" : "Resend code"}
+          </button>
+          <span className="text-neutral-300 mx-1">·</span>
+          <button
+            onClick={() => {
+              setMagicLinkSent(false);
+              setError(null);
+            }}
+            className="text-sm text-neutral-600 hover:underline"
+          >
+            Use a different email
+          </button>
+        </div>
       </div>
     );
   }
@@ -96,7 +152,7 @@ export function LoginForm({ inviteMode, defaultEmail }: LoginFormProps) {
           />
           <Button type="submit" variant="gold" loading={loading} className="w-full">
             <Mail className="h-4 w-4" />
-            Send me a sign-in link
+            Send verification code
           </Button>
         </form>
       </div>
@@ -113,7 +169,7 @@ export function LoginForm({ inviteMode, defaultEmail }: LoginFormProps) {
           </div>
         )}
         <div className="bg-primary-50 border border-primary-200 rounded-md px-4 py-3 text-sm text-primary-800">
-          Enter your email to receive a sign-in link. You&apos;ll be prompted to set a new password.
+          Enter your email to receive a verification code. You&apos;ll be prompted to set a new password.
         </div>
         <form action={handleMagicLink} className="space-y-4">
           <Input
@@ -128,7 +184,7 @@ export function LoginForm({ inviteMode, defaultEmail }: LoginFormProps) {
           />
           <Button type="submit" variant="gold" loading={loading} className="w-full">
             <Mail className="h-4 w-4" />
-            Send me a sign-in link
+            Send verification code
           </Button>
         </form>
         <button

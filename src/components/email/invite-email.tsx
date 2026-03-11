@@ -57,8 +57,9 @@ export function InviteEmail({ firstName, email, loginUrl }: InviteEmailProps) {
           </Section>
 
           <Text style={smallText}>
-            You&apos;ll be asked to set a password and review your privacy
-            settings when you first sign in.
+            After clicking the button, you&apos;ll receive a second email with
+            a verification code to enter on the sign-in page. Then you&apos;ll
+            set a password and review your privacy settings.
           </Text>
 
           <Hr style={hr} />

@@ -138,6 +138,37 @@ export async function completeOnboarding(formData: FormData) {
   redirect("/directory");
 }
 
+export async function verifyOtpCode(email: string, token: string) {
+  if (!email || !token) {
+    return { error: "Email and code are required" };
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.verifyOtp({
+    email: email.toLowerCase(),
+    token,
+    type: "email",
+  });
+
+  if (error) {
+    return { error: "Invalid or expired code. Please request a new one." };
+  }
+
+  if (data.user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_onboarded")
+      .eq("id", data.user.id)
+      .single();
+
+    if (!profile?.is_onboarded) {
+      redirect("/onboarding");
+    }
+  }
+
+  redirect("/reset-password");
+}
+
 export async function updatePassword(formData: FormData) {
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
