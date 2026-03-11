@@ -408,18 +408,24 @@ export async function sendInviteEmails(batchSize: number) {
   await requireAdmin();
   const adminClient = createAdminClient();
 
-  const cap = batchSize;
-
-  // Fetch unsent allowlist entries
-  const { data: unsent, error: fetchErr } = await adminClient
+  // Fetch all unsent allowlist entries (no limit yet — we filter first)
+  const { data: allUnsent, error: fetchErr } = await adminClient
     .from("auth_allowlist")
     .select("email")
     .is("invite_sent_at", null)
-    .order("created_at", { ascending: true })
-    .limit(cap);
+    .order("created_at", { ascending: true });
 
   if (fetchErr) return { error: fetchErr.message };
-  if (!unsent || unsent.length === 0) return { sent: 0, errors: [] };
+  if (!allUnsent || allUnsent.length === 0) return { sent: 0, errors: [] };
+
+  // Exclude already-onboarded users (they signed in via the old flow)
+  const allEmails = allUnsent.map((u) => u.email.toLowerCase());
+  const onboardedSet = await getOnboardedEmails(adminClient, allEmails);
+  const unsent = allUnsent
+    .filter((u) => !onboardedSet.has(u.email.toLowerCase()))
+    .slice(0, batchSize);
+
+  if (unsent.length === 0) return { sent: 0, errors: [] };
 
   // Look up first names from members table
   const emails = unsent.map((u) => u.email.toLowerCase());
