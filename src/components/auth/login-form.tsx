@@ -58,7 +58,7 @@ export function LoginForm({ inviteMode, defaultEmail }: LoginFormProps) {
           </div>
           <h2 className="text-xl font-semibold font-heading">Enter your verification code</h2>
           <p className="text-sm text-neutral-700">
-            We sent a 6-digit code to <strong>{sentEmail}</strong>.
+            We sent a verification code to <strong>{sentEmail}</strong>.
           </p>
         </div>
         <form
@@ -79,8 +79,8 @@ export function LoginForm({ inviteMode, defaultEmail }: LoginFormProps) {
             name="otp"
             type="text"
             inputMode="numeric"
-            maxLength={6}
-            label="6-digit code"
+            maxLength={8}
+            label="Verification code"
             required
             autoFocus
             autoComplete="one-time-code"
