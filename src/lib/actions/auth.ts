@@ -106,7 +106,10 @@ export async function completeOnboarding(formData: FormData) {
   if (pwError) return { error: pwError.message };
 
   // Update profile: set display name and mark as onboarded
-  const { error: profileError } = await supabase
+  // Use admin client because the password change above refreshes the session,
+  // leaving the user-scoped client with a stale JWT that fails RLS silently.
+  const adminClient = createAdminClient();
+  const { error: profileError } = await adminClient
     .from("profiles")
     .update({
       display_name: displayName.trim(),
@@ -119,7 +122,6 @@ export async function completeOnboarding(formData: FormData) {
   // Update privacy settings if member record exists
   const memberId = formData.get("memberId") as string;
   if (memberId) {
-    const adminClient = createAdminClient();
     await adminClient
       .from("members")
       .update({
